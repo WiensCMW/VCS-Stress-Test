@@ -17,8 +17,6 @@ namespace VersionControlStressTest
         private MyThreadHelper _mth = new MyThreadHelper();
         private MyWorker _workerTest;
 
-        private string _svnWC = "";
-
         #region General Methods
         public frmMain()
         {
@@ -337,7 +335,7 @@ namespace VersionControlStressTest
                     MessageBox.Show("Invalid File Size.");
                     return;
                 }
-                else if (fileSize > 5)
+                else if (fileSize > 25)
                 {
                     MessageBox.Show("File to large.");
                     return;
@@ -385,21 +383,21 @@ namespace VersionControlStressTest
                 //Directory.SetCurrentDirectory(dir);
                 //string svnCommitArg = "commit -m \"Commiting from shell\"";
 
-                ProcessStartInfo gitInfo = new ProcessStartInfo();
+                ProcessStartInfo cmdInfo = new ProcessStartInfo();
                 Process gitProcess = new Process();
 
-                gitInfo.CreateNoWindow = true;
-                gitInfo.UseShellExecute = false;
-                gitInfo.FileName = @"svn";
-                gitInfo.Arguments = svnCommand; //command such as "commit -m"
-                gitInfo.WorkingDirectory = dir;  //repo path
-                gitInfo.RedirectStandardError = true;
-                gitInfo.RedirectStandardOutput = true;
+                cmdInfo.CreateNoWindow = true;
+                cmdInfo.UseShellExecute = false;
+                cmdInfo.FileName = @"svn";
+                cmdInfo.Arguments = svnCommand; //command such as "commit -m"
+                cmdInfo.WorkingDirectory = dir;  //repo path
+                cmdInfo.RedirectStandardError = true;
+                cmdInfo.RedirectStandardOutput = true;
                 string[] logRaw = new string[] { };
 
                 using (var proc = new System.Diagnostics.Process())
                 {
-                    proc.StartInfo = gitInfo;
+                    proc.StartInfo = cmdInfo;
                     proc.Start();
 
                     var output = proc.StandardOutput.ReadToEnd();
@@ -531,7 +529,7 @@ namespace VersionControlStressTest
                     MessageBox.Show("Invalid File Size.");
                     return;
                 }
-                else if (fileSize > 5)
+                else if (fileSize > 25)
                 {
                     MessageBox.Show("File to large.");
                     return;
