@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,16 +12,14 @@ using System.Windows.Forms;
 
 namespace VersionControlStressTest
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
         private MyThreadHelper _mth = new MyThreadHelper();
         private MyWorker _workerTest;
 
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
-
-            label1.Visible = false;
 
             // Initialize Background Workers
             _workerTest = new MyWorker();
@@ -33,24 +31,6 @@ namespace VersionControlStressTest
 
             // Add to worker list so it can be cancelled on form closing
             _mth.WorkerList.Add(_workerTest);
-
-            SetCancelButton();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            TestWorker();
-        }
-
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            if (!_workerTest.IsIdle)
-                _workerTest.CancelAsync();
-        }
-
-        private void SetCancelButton()
-        {
-            buttonCancel.Visible = !_workerTest.IsIdle;
         }
 
         private bool TestWorker()
@@ -82,8 +62,8 @@ namespace VersionControlStressTest
                 if (_workerTest.IsIdle)
                 {
                     _workerTest.RunWorkerAsync(workerArgs);
-                    button1.Enabled = false;
-                    SetCancelButton();
+                    //button1.Enabled = false;
+                    //SetCancelButton();
                     return true;
                 }
             }
@@ -173,8 +153,8 @@ namespace VersionControlStressTest
             try
             {
                 // Show Progress label and report worker's progress
-                label1.Visible = true;
-                label1.Text = (string)e.UserState;
+                //label1.Visible = true;
+                //label1.Text = (string)e.UserState;
             }
             catch (Exception ex)
             {
@@ -188,14 +168,14 @@ namespace VersionControlStressTest
             try
             {
                 // Hide Progress label
-                label1.Visible = false;
+                //label1.Visible = false;
 
                 // Evaluate worker's Result
                 if (e.Cancelled)
                 {
                     // Worker was Cancelled
-                    label1.Visible = true;
-                    label1.Text = "Worker Cancelled!!!";
+                    //label1.Visible = true;
+                    //label1.Text = "Worker Cancelled!!!";
                 }
                 else if (e.Result is Exception)
                 {
@@ -226,8 +206,8 @@ namespace VersionControlStressTest
                         }
                     }
 
-                    label1.Visible = true;
-                    label1.Text = workerMessage;
+                    //label1.Visible = true;
+                    //label1.Text = workerMessage;
                     #endregion
 
                     #region Check for and execute queued up work
@@ -242,15 +222,15 @@ namespace VersionControlStressTest
             }
             finally
             {
-                SetCancelButton();
-                button1.Enabled = true;
+                //SetCancelButton();
+                //button1.Enabled = true;
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             #region Cancel all running Workers, Threads and Timers
-            label1.Text = "Cleaning up background threads, please wait";
+            //label1.Text = "Cleaning up background threads, please wait";
 
             #region Cancel all Workers
             bool cancelFail = false;
