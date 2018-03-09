@@ -40,6 +40,7 @@ namespace VersionControlStressTest
             this.tabPageHG = new System.Windows.Forms.TabPage();
             this.labelSVNFileSize = new System.Windows.Forms.Label();
             this.textBoxSVNFileSize = new System.Windows.Forms.TextBox();
+            this.buttonSVNUpdate = new System.Windows.Forms.Button();
             this.tabControlMain.SuspendLayout();
             this.tabPageSVN.SuspendLayout();
             this.groupBoxSVNCreate.SuspendLayout();
@@ -85,6 +86,7 @@ namespace VersionControlStressTest
             // 
             this.groupBoxSVNCreate.Controls.Add(this.labelSVNFileSize);
             this.groupBoxSVNCreate.Controls.Add(this.textBoxSVNFileSize);
+            this.groupBoxSVNCreate.Controls.Add(this.buttonSVNUpdate);
             this.groupBoxSVNCreate.Controls.Add(this.labelSVNFileCount);
             this.groupBoxSVNCreate.Controls.Add(this.textBoxSVNFilesCount);
             this.groupBoxSVNCreate.Controls.Add(this.buttonSVNCreate);
@@ -155,9 +157,9 @@ namespace VersionControlStressTest
             this.labelSVNFileSize.AutoSize = true;
             this.labelSVNFileSize.Location = new System.Drawing.Point(6, 45);
             this.labelSVNFileSize.Name = "labelSVNFileSize";
-            this.labelSVNFileSize.Size = new System.Drawing.Size(83, 13);
+            this.labelSVNFileSize.Size = new System.Drawing.Size(61, 13);
             this.labelSVNFileSize.TabIndex = 9;
-            this.labelSVNFileSize.Text = "Number of Files:";
+            this.labelSVNFileSize.Text = "Size of File:";
             // 
             // textBoxSVNFileSize
             // 
@@ -166,6 +168,16 @@ namespace VersionControlStressTest
             this.textBoxSVNFileSize.Size = new System.Drawing.Size(49, 20);
             this.textBoxSVNFileSize.TabIndex = 10;
             this.textBoxSVNFileSize.Text = "2";
+            // 
+            // buttonSVNUpdate
+            // 
+            this.buttonSVNUpdate.Location = new System.Drawing.Point(90, 71);
+            this.buttonSVNUpdate.Name = "buttonSVNUpdate";
+            this.buttonSVNUpdate.Size = new System.Drawing.Size(75, 23);
+            this.buttonSVNUpdate.TabIndex = 3;
+            this.buttonSVNUpdate.Text = "Update";
+            this.buttonSVNUpdate.UseVisualStyleBackColor = true;
+            this.buttonSVNUpdate.Click += new System.EventHandler(this.buttonSVNUpdate_Click);
             // 
             // frmMain
             // 
@@ -199,6 +211,7 @@ namespace VersionControlStressTest
         private System.Windows.Forms.TextBox textBoxSVNFilesCount;
         private System.Windows.Forms.Label labelSVNFileSize;
         private System.Windows.Forms.TextBox textBoxSVNFileSize;
+        private System.Windows.Forms.Button buttonSVNUpdate;
     }
 }
 

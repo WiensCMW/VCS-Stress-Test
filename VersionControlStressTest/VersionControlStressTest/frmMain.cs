@@ -448,7 +448,7 @@ namespace VersionControlStressTest
             {
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        } 
+        }
         #endregion
 
         #region Error Handling for the entire Application
@@ -494,5 +494,112 @@ namespace VersionControlStressTest
         //    LogError(form, method, ex);
         //}
         #endregion
+
+        private void buttonSVNUpdate_Click(object sender, EventArgs e)
+        {
+            SVNUpdate();
+        }
+
+        private void SVNUpdate()
+        {
+            try
+            {
+                #region Validate
+                // Validate
+                string dir = textBoxSVNWC.Text;
+                if (string.IsNullOrEmpty(dir))
+                {
+                    MessageBox.Show("SVN Working Copy location can't be empty.");
+                    return;
+                }
+                else if (!Directory.Exists(dir))
+                {
+                    MessageBox.Show("Selected SVN Working Copy doesn't exist.");
+                    return;
+                }
+
+                int fileCount = My_Parse.ParseInt32Or0(textBoxSVNFilesCount.Text);
+                if (fileCount <= 0)
+                {
+                    MessageBox.Show("Invalid File Count.");
+                    return;
+                }
+
+                int fileSize = My_Parse.ParseInt32Or0(textBoxSVNFileSize.Text);
+                if (fileSize <= 0)
+                {
+                    MessageBox.Show("Invalid File Size.");
+                    return;
+                }
+                else if (fileSize > 5)
+                {
+                    MessageBox.Show("File to large.");
+                    return;
+                }
+                #endregion
+
+                #region Get list of valid Files in Working Copy
+                string[] fileList = Directory.GetFiles(dir);
+                List<FileInfo> files = new List<FileInfo>();
+                for (int i = 0; i < fileList.Length; i++)
+                {
+                    FileInfo file = new FileInfo(fileList[i]);
+                    if (file.Exists)
+                    {
+                        // Make sure the file name is a valid Guid
+                        Guid? fileName = My_Parse.ParseGuidOrNull(file.Name.Replace(file.Extension, ""));
+                        if (fileName.HasValue)
+                            files.Add(file);
+                    }
+                }
+
+                List<FileInfo> finalFiles = new List<FileInfo>();
+                Random rnd = new Random();
+                while (finalFiles.Count < fileCount)
+                {
+                //    int index = ... // Get a random number between 0 and list.count
+                //                    // Do something with list(index);
+                //    list.RemoveAt(index);
+
+                    int r = rnd.Next(files.Count);
+                    finalFiles.Add(files[r]);
+                    files.RemoveAt(r);
+                }
+                #endregion
+
+                List<string> log = new List<string>();
+
+                for (int i = 0; i < finalFiles.Count; i++)
+                {
+                    #region Random File Generator
+                    //string fileName = Guid.NewGuid().ToString() + ".cmw";
+                    //string filePath = Path.Combine(dir, fileName);
+                    byte[] data = new byte[fileSize * 1024 * 1024];
+                    Random rng = new Random();
+                    rng.NextBytes(data);
+                    File.WriteAllBytes(finalFiles[i].FullName, data);
+                    #endregion
+
+                    //string[] addLog = (SVNCommitTest(textBoxSVNWC.Text, string.Format("add {0}", fileName)));
+                    //if (addLog != null)
+                    //    log.AddRange(addLog);
+
+                    string[] commit = SVNCommitTest(textBoxSVNWC.Text, string.Format("commit -m {0}Updated File {1}{0} {1}"
+                        , "\""
+                        , finalFiles[i].Name));
+                    if (commit != null)
+                        log.AddRange(commit);
+                }
+
+                ////MessageBox.Show(string.Join("\n", log));
+                //File.AppendAllText(dir + @"\CommitLog.txt", string.Join("\n", log));
+                MessageBox.Show("Done!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //HostGlobals.ErrorMessage(this.Name, System.Reflection.MethodBase.GetCurrentMethod().Name, ex, _spm, _touchScreenMode);
+            }
+        }
     }
 }

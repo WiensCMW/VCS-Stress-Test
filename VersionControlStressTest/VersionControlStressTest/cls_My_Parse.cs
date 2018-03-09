@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,6 +70,12 @@ namespace VersionControlStressTest
                 return true;
             else
                 return null;
+        }
+
+        public static Guid? ParseGuidOrNull(string input)
+        {
+            Guid guid;
+            return Guid.TryParse(input, out guid) ? (Guid?)guid : null;
         }
 
         public static System.Drawing.Point ParsePointOrNewPoint(string input)
