@@ -31,10 +31,10 @@ namespace VersionControlStressTest
             this.button2 = new System.Windows.Forms.Button();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageSVN = new System.Windows.Forms.TabPage();
-            this.tabPageHG = new System.Windows.Forms.TabPage();
-            this.labelSVNWC = new System.Windows.Forms.Label();
-            this.textBoxSVNWC = new System.Windows.Forms.TextBox();
             this.buttonSVNWCBrowse = new System.Windows.Forms.Button();
+            this.textBoxSVNWC = new System.Windows.Forms.TextBox();
+            this.labelSVNWC = new System.Windows.Forms.Label();
+            this.tabPageHG = new System.Windows.Forms.TabPage();
             this.tabControlMain.SuspendLayout();
             this.tabPageSVN.SuspendLayout();
             this.SuspendLayout();
@@ -59,6 +59,7 @@ namespace VersionControlStressTest
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(594, 403);
             this.tabControlMain.TabIndex = 4;
+            this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.tabControlMain_SelectedIndexChanged);
             // 
             // tabPageSVN
             // 
@@ -74,15 +75,23 @@ namespace VersionControlStressTest
             this.tabPageSVN.Text = "SVN";
             this.tabPageSVN.UseVisualStyleBackColor = true;
             // 
-            // tabPageHG
+            // buttonSVNWCBrowse
             // 
-            this.tabPageHG.Location = new System.Drawing.Point(4, 22);
-            this.tabPageHG.Name = "tabPageHG";
-            this.tabPageHG.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageHG.Size = new System.Drawing.Size(524, 401);
-            this.tabPageHG.TabIndex = 1;
-            this.tabPageHG.Text = "Mercurial";
-            this.tabPageHG.UseVisualStyleBackColor = true;
+            this.buttonSVNWCBrowse.Location = new System.Drawing.Point(503, 4);
+            this.buttonSVNWCBrowse.Name = "buttonSVNWCBrowse";
+            this.buttonSVNWCBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonSVNWCBrowse.TabIndex = 6;
+            this.buttonSVNWCBrowse.Text = "Browse";
+            this.buttonSVNWCBrowse.UseVisualStyleBackColor = true;
+            this.buttonSVNWCBrowse.Click += new System.EventHandler(this.buttonSVNWCBrowse_Click);
+            // 
+            // textBoxSVNWC
+            // 
+            this.textBoxSVNWC.Location = new System.Drawing.Point(91, 6);
+            this.textBoxSVNWC.Name = "textBoxSVNWC";
+            this.textBoxSVNWC.ReadOnly = true;
+            this.textBoxSVNWC.Size = new System.Drawing.Size(406, 20);
+            this.textBoxSVNWC.TabIndex = 5;
             // 
             // labelSVNWC
             // 
@@ -93,22 +102,15 @@ namespace VersionControlStressTest
             this.labelSVNWC.TabIndex = 4;
             this.labelSVNWC.Text = "Working Copy:";
             // 
-            // textBoxSVNWC
+            // tabPageHG
             // 
-            this.textBoxSVNWC.Location = new System.Drawing.Point(91, 6);
-            this.textBoxSVNWC.Name = "textBoxSVNWC";
-            this.textBoxSVNWC.ReadOnly = true;
-            this.textBoxSVNWC.Size = new System.Drawing.Size(406, 20);
-            this.textBoxSVNWC.TabIndex = 5;
-            // 
-            // buttonSVNWCBrowse
-            // 
-            this.buttonSVNWCBrowse.Location = new System.Drawing.Point(503, 4);
-            this.buttonSVNWCBrowse.Name = "buttonSVNWCBrowse";
-            this.buttonSVNWCBrowse.Size = new System.Drawing.Size(75, 23);
-            this.buttonSVNWCBrowse.TabIndex = 6;
-            this.buttonSVNWCBrowse.Text = "Browse";
-            this.buttonSVNWCBrowse.UseVisualStyleBackColor = true;
+            this.tabPageHG.Location = new System.Drawing.Point(4, 22);
+            this.tabPageHG.Name = "tabPageHG";
+            this.tabPageHG.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageHG.Size = new System.Drawing.Size(586, 377);
+            this.tabPageHG.TabIndex = 1;
+            this.tabPageHG.Text = "Mercurial";
+            this.tabPageHG.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
@@ -118,7 +120,8 @@ namespace VersionControlStressTest
             this.Controls.Add(this.tabControlMain);
             this.Name = "frmMain";
             this.Text = "Source Control - Stress Test";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.tabControlMain.ResumeLayout(false);
             this.tabPageSVN.ResumeLayout(false);
             this.tabPageSVN.PerformLayout();

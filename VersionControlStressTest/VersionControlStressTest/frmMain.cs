@@ -17,6 +17,9 @@ namespace VersionControlStressTest
         private MyThreadHelper _mth = new MyThreadHelper();
         private MyWorker _workerTest;
 
+        private string _svnWC = "";
+
+        #region General Methods
         public frmMain()
         {
             InitializeComponent();
@@ -33,6 +36,77 @@ namespace VersionControlStressTest
             _mth.WorkerList.Add(_workerTest);
         }
 
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                #region Cancel all running Workers, Threads and Timers
+                //label1.Text = "Cleaning up background threads, please wait";
+
+                #region Cancel all Workers
+                bool cancelFail = false;
+                for (int i = 0; i < _mth.WorkerList.Count; i++)
+                {
+                    if (!_mth.WorkerList[i].IsIdle)
+                    {
+                        // Command worker to cancel itself
+                        _mth.WorkerList[i].CancelAsync();
+
+                        // Force UI Thread to wait until worker signals it's Reset Event, or timeout after 15000 milliseconds
+                        if (!_mth.WorkerList[i].Reset.WaitOne(15000))
+                            cancelFail = true;
+                    }
+                }
+                #endregion
+
+                if (cancelFail)
+                {
+                    MessageBox.Show("Unable to clean up all background threads." + "\n" + "\n"
+                        + "Please wait a few seconds and try closing the app again."
+                        , "Thread cleanup failed"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Warning);
+
+                    e.Cancel = true;
+                    return;
+                }
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void tabControlMain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (tabControlMain.SelectedTab == tabPageSVN)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+        #region Worker Methods
         private bool TestWorker()
         {
             try
@@ -125,7 +199,7 @@ namespace VersionControlStressTest
                 #endregion
 
                 #region Create Worker Results and pass them out of the Worker
-                object[] results = new object[] 
+                object[] results = new object[]
                 {
                     "Worker Finished!"
                 };
@@ -225,42 +299,8 @@ namespace VersionControlStressTest
                 //SetCancelButton();
                 //button1.Enabled = true;
             }
-        }
-
-        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            #region Cancel all running Workers, Threads and Timers
-            //label1.Text = "Cleaning up background threads, please wait";
-
-            #region Cancel all Workers
-            bool cancelFail = false;
-            for (int i = 0; i < _mth.WorkerList.Count; i++)
-            {
-                if (!_mth.WorkerList[i].IsIdle)
-                {
-                    // Command worker to cancel itself
-                    _mth.WorkerList[i].CancelAsync();
-
-                    // Force UI Thread to wait until worker signals it's Reset Event, or timeout after 15000 milliseconds
-                    if (!_mth.WorkerList[i].Reset.WaitOne(15000))
-                        cancelFail = true;
-                }
-            }
-            #endregion
-
-            if (cancelFail)
-            {
-                MessageBox.Show("Unable to clean up all background threads." + "\n" + "\n"
-                    + "Please wait a few seconds and try closing the app again."
-                    , "Thread cleanup failed"
-                    , MessageBoxButtons.OK
-                    , MessageBoxIcon.Warning);
-
-                e.Cancel = true;
-                return;
-            }
-            #endregion
-        }
+        } 
+        #endregion
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -348,6 +388,34 @@ namespace VersionControlStressTest
 
             return null;
         }
+
+        #region SVN Methods
+        private void buttonSVNWCBrowse_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FolderBrowserDialog diag = new FolderBrowserDialog();
+                DialogResult results = diag.ShowDialog(this);
+                if (results == DialogResult.OK)
+                {
+                    if (!string.IsNullOrEmpty(diag.SelectedPath)
+                        && Directory.Exists(diag.SelectedPath))
+                    {
+                        textBoxSVNWC.Text = diag.SelectedPath;
+                    }
+                    else
+                        textBoxSVNWC.Text = "";
+                }
+                else
+                    textBoxSVNWC.Text = "";
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        } 
+        #endregion
 
         #region Error Handling for the entire Application
         //public static void ErrorMessage(string form
