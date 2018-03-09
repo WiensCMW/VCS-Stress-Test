@@ -302,12 +302,35 @@ namespace VersionControlStressTest
         } 
         #endregion
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonSVNCreate_Click(object sender, EventArgs e)
         {
-            string dir = @"C:\Users\cornie\Downloads\test\trunk";
-            int fileCount = 10;
+            SVNCreate();
+        }
+
+        private void SVNCreate()
+        {
             try
             {
+                // Validate
+                string dir = textBoxSVNWC.Text;
+                if (string.IsNullOrEmpty(dir))
+                {
+                    MessageBox.Show("SVN Working Copy location can't be empty.");
+                    return;
+                }
+                else if (!Directory.Exists(dir))
+                {
+                    MessageBox.Show("Selected SVN Working Copy doesn't exist.");
+                    return;
+                }
+
+                int fileCount = My_Parse.ParseInt32Or0(textBoxSVNFilesCount.Text);
+                if (fileCount <= 0)
+                {
+                    MessageBox.Show("Invalid File Count.");
+                    return;
+                }
+
                 List<string> log = new List<string>();
 
                 for (int i = 0; i < fileCount; i++)
@@ -322,11 +345,11 @@ namespace VersionControlStressTest
                     File.WriteAllBytes(filePath, data);
                     #endregion 
 
-                    string[] addLog = (SVNCommitTest(dir, string.Format("add {0}", fileName)));
+                    string[] addLog = (SVNCommitTest(textBoxSVNWC.Text, string.Format("add {0}", fileName)));
                     if (addLog != null)
                         log.AddRange(addLog);
 
-                    string[] commit = SVNCommitTest(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
+                    string[] commit = SVNCommitTest(textBoxSVNWC.Text, string.Format("commit -m {0}Committing File {1}{0} {1}"
                         , "\""
                         , fileName));
                     if (commit != null)
