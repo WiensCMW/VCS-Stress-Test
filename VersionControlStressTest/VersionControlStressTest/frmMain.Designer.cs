@@ -31,13 +31,15 @@ namespace VersionControlStressTest
             this.buttonSVNCreate = new System.Windows.Forms.Button();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageSVN = new System.Windows.Forms.TabPage();
+            this.groupBoxSVNCreate = new System.Windows.Forms.GroupBox();
+            this.labelSVNFileCount = new System.Windows.Forms.Label();
+            this.textBoxSVNFilesCount = new System.Windows.Forms.TextBox();
             this.buttonSVNWCBrowse = new System.Windows.Forms.Button();
             this.textBoxSVNWC = new System.Windows.Forms.TextBox();
             this.labelSVNWC = new System.Windows.Forms.Label();
             this.tabPageHG = new System.Windows.Forms.TabPage();
-            this.groupBoxSVNCreate = new System.Windows.Forms.GroupBox();
-            this.textBoxSVNFilesCount = new System.Windows.Forms.TextBox();
-            this.labelSVNFileCount = new System.Windows.Forms.Label();
+            this.labelSVNFileSize = new System.Windows.Forms.Label();
+            this.textBoxSVNFileSize = new System.Windows.Forms.TextBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageSVN.SuspendLayout();
             this.groupBoxSVNCreate.SuspendLayout();
@@ -45,7 +47,7 @@ namespace VersionControlStressTest
             // 
             // buttonSVNCreate
             // 
-            this.buttonSVNCreate.Location = new System.Drawing.Point(150, 14);
+            this.buttonSVNCreate.Location = new System.Drawing.Point(9, 71);
             this.buttonSVNCreate.Name = "buttonSVNCreate";
             this.buttonSVNCreate.Size = new System.Drawing.Size(75, 23);
             this.buttonSVNCreate.TabIndex = 3;
@@ -79,6 +81,37 @@ namespace VersionControlStressTest
             this.tabPageSVN.Text = "SVN";
             this.tabPageSVN.UseVisualStyleBackColor = true;
             // 
+            // groupBoxSVNCreate
+            // 
+            this.groupBoxSVNCreate.Controls.Add(this.labelSVNFileSize);
+            this.groupBoxSVNCreate.Controls.Add(this.textBoxSVNFileSize);
+            this.groupBoxSVNCreate.Controls.Add(this.labelSVNFileCount);
+            this.groupBoxSVNCreate.Controls.Add(this.textBoxSVNFilesCount);
+            this.groupBoxSVNCreate.Controls.Add(this.buttonSVNCreate);
+            this.groupBoxSVNCreate.Location = new System.Drawing.Point(8, 32);
+            this.groupBoxSVNCreate.Name = "groupBoxSVNCreate";
+            this.groupBoxSVNCreate.Size = new System.Drawing.Size(570, 109);
+            this.groupBoxSVNCreate.TabIndex = 7;
+            this.groupBoxSVNCreate.TabStop = false;
+            this.groupBoxSVNCreate.Text = "Create Files";
+            // 
+            // labelSVNFileCount
+            // 
+            this.labelSVNFileCount.AutoSize = true;
+            this.labelSVNFileCount.Location = new System.Drawing.Point(6, 19);
+            this.labelSVNFileCount.Name = "labelSVNFileCount";
+            this.labelSVNFileCount.Size = new System.Drawing.Size(83, 13);
+            this.labelSVNFileCount.TabIndex = 8;
+            this.labelSVNFileCount.Text = "Number of Files:";
+            // 
+            // textBoxSVNFilesCount
+            // 
+            this.textBoxSVNFilesCount.Location = new System.Drawing.Point(95, 16);
+            this.textBoxSVNFilesCount.Name = "textBoxSVNFilesCount";
+            this.textBoxSVNFilesCount.Size = new System.Drawing.Size(49, 20);
+            this.textBoxSVNFilesCount.TabIndex = 8;
+            this.textBoxSVNFilesCount.Text = "10";
+            // 
             // buttonSVNWCBrowse
             // 
             this.buttonSVNWCBrowse.Location = new System.Drawing.Point(503, 4);
@@ -96,6 +129,7 @@ namespace VersionControlStressTest
             this.textBoxSVNWC.ReadOnly = true;
             this.textBoxSVNWC.Size = new System.Drawing.Size(406, 20);
             this.textBoxSVNWC.TabIndex = 5;
+            this.textBoxSVNWC.Text = "D:\\_repos\\StressTest\\trunk";
             // 
             // labelSVNWC
             // 
@@ -116,33 +150,22 @@ namespace VersionControlStressTest
             this.tabPageHG.Text = "Mercurial";
             this.tabPageHG.UseVisualStyleBackColor = true;
             // 
-            // groupBoxSVNCreate
+            // labelSVNFileSize
             // 
-            this.groupBoxSVNCreate.Controls.Add(this.labelSVNFileCount);
-            this.groupBoxSVNCreate.Controls.Add(this.textBoxSVNFilesCount);
-            this.groupBoxSVNCreate.Controls.Add(this.buttonSVNCreate);
-            this.groupBoxSVNCreate.Location = new System.Drawing.Point(8, 32);
-            this.groupBoxSVNCreate.Name = "groupBoxSVNCreate";
-            this.groupBoxSVNCreate.Size = new System.Drawing.Size(570, 109);
-            this.groupBoxSVNCreate.TabIndex = 7;
-            this.groupBoxSVNCreate.TabStop = false;
-            this.groupBoxSVNCreate.Text = "Create Files";
+            this.labelSVNFileSize.AutoSize = true;
+            this.labelSVNFileSize.Location = new System.Drawing.Point(6, 45);
+            this.labelSVNFileSize.Name = "labelSVNFileSize";
+            this.labelSVNFileSize.Size = new System.Drawing.Size(83, 13);
+            this.labelSVNFileSize.TabIndex = 9;
+            this.labelSVNFileSize.Text = "Number of Files:";
             // 
-            // textBoxSVNFilesCount
+            // textBoxSVNFileSize
             // 
-            this.textBoxSVNFilesCount.Location = new System.Drawing.Point(95, 16);
-            this.textBoxSVNFilesCount.Name = "textBoxSVNFilesCount";
-            this.textBoxSVNFilesCount.Size = new System.Drawing.Size(49, 20);
-            this.textBoxSVNFilesCount.TabIndex = 8;
-            // 
-            // labelSVNFileCount
-            // 
-            this.labelSVNFileCount.AutoSize = true;
-            this.labelSVNFileCount.Location = new System.Drawing.Point(6, 19);
-            this.labelSVNFileCount.Name = "labelSVNFileCount";
-            this.labelSVNFileCount.Size = new System.Drawing.Size(83, 13);
-            this.labelSVNFileCount.TabIndex = 8;
-            this.labelSVNFileCount.Text = "Number of Files:";
+            this.textBoxSVNFileSize.Location = new System.Drawing.Point(95, 42);
+            this.textBoxSVNFileSize.Name = "textBoxSVNFileSize";
+            this.textBoxSVNFileSize.Size = new System.Drawing.Size(49, 20);
+            this.textBoxSVNFileSize.TabIndex = 10;
+            this.textBoxSVNFileSize.Text = "2";
             // 
             // frmMain
             // 
@@ -174,6 +197,8 @@ namespace VersionControlStressTest
         private System.Windows.Forms.GroupBox groupBoxSVNCreate;
         private System.Windows.Forms.Label labelSVNFileCount;
         private System.Windows.Forms.TextBox textBoxSVNFilesCount;
+        private System.Windows.Forms.Label labelSVNFileSize;
+        private System.Windows.Forms.TextBox textBoxSVNFileSize;
     }
 }
 

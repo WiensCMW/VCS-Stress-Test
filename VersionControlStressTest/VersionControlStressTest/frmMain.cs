@@ -331,6 +331,18 @@ namespace VersionControlStressTest
                     return;
                 }
 
+                int fileSize = My_Parse.ParseInt32Or0(textBoxSVNFileSize.Text);
+                if (fileSize <= 0)
+                {
+                    MessageBox.Show("Invalid File Size.");
+                    return;
+                }
+                else if (fileSize > 5)
+                {
+                    MessageBox.Show("File to large.");
+                    return;
+                }
+
                 List<string> log = new List<string>();
 
                 for (int i = 0; i < fileCount; i++)
@@ -338,8 +350,7 @@ namespace VersionControlStressTest
                     #region Random File Generator
                     string fileName = Guid.NewGuid().ToString() + ".cmw";
                     string filePath = Path.Combine(dir, fileName);
-                    int sizeInMb = 10;
-                    byte[] data = new byte[sizeInMb * 1024 * 1024];
+                    byte[] data = new byte[fileSize * 1024 * 1024];
                     Random rng = new Random();
                     rng.NextBytes(data);
                     File.WriteAllBytes(filePath, data);
