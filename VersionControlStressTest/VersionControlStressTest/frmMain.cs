@@ -424,6 +424,13 @@ namespace VersionControlStressTest
                         log.AddRange(commit);
                 }
 
+                if (checkBoxHGPushAfterCreate.Checked)
+                {
+                    string[] commit = HGCommit(dir, string.Format("push"));
+                    if (commit != null)
+                        log.AddRange(commit);
+                }
+
                 MessageBox.Show("Done!");
             }
             catch (Exception ex)
@@ -511,6 +518,13 @@ namespace VersionControlStressTest
                     string[] commit = HGCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
                         , "\""
                         , string.Join(", ", files.Select(j => j.Name))));
+                    if (commit != null)
+                        log.AddRange(commit);
+                }
+
+                if (checkBoxHGPushAfterUpdate.Checked)
+                {
+                    string[] commit = HGCommit(dir, string.Format("push"));
                     if (commit != null)
                         log.AddRange(commit);
                 }

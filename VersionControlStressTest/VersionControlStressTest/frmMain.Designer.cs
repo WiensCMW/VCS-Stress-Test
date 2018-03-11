@@ -61,6 +61,8 @@ namespace VersionControlStressTest
             this.buttonHGWCBrowse = new System.Windows.Forms.Button();
             this.textBoxHGWC = new System.Windows.Forms.TextBox();
             this.labelHGWC = new System.Windows.Forms.Label();
+            this.checkBoxHGPushAfterCreate = new System.Windows.Forms.CheckBox();
+            this.checkBoxHGPushAfterUpdate = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageSVN.SuspendLayout();
             this.groupBoxSVNUpdate.SuspendLayout();
@@ -256,6 +258,7 @@ namespace VersionControlStressTest
             // 
             // groupBoxHGUpdate
             // 
+            this.groupBoxHGUpdate.Controls.Add(this.checkBoxHGPushAfterUpdate);
             this.groupBoxHGUpdate.Controls.Add(this.labelHGUpdateFileSize);
             this.groupBoxHGUpdate.Controls.Add(this.textBoxHGUpdateFileSize);
             this.groupBoxHGUpdate.Controls.Add(this.buttonHGUpdate);
@@ -314,6 +317,7 @@ namespace VersionControlStressTest
             // 
             // groupBoxHGCreate
             // 
+            this.groupBoxHGCreate.Controls.Add(this.checkBoxHGPushAfterCreate);
             this.groupBoxHGCreate.Controls.Add(this.labelHGFileSize);
             this.groupBoxHGCreate.Controls.Add(this.textBoxHGFileSize);
             this.groupBoxHGCreate.Controls.Add(this.labelHGFileCount);
@@ -397,6 +401,26 @@ namespace VersionControlStressTest
             this.labelHGWC.TabIndex = 12;
             this.labelHGWC.Text = "Working Copy:";
             // 
+            // checkBoxHGPushAfterCreate
+            // 
+            this.checkBoxHGPushAfterCreate.AutoSize = true;
+            this.checkBoxHGPushAfterCreate.Location = new System.Drawing.Point(90, 75);
+            this.checkBoxHGPushAfterCreate.Name = "checkBoxHGPushAfterCreate";
+            this.checkBoxHGPushAfterCreate.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxHGPushAfterCreate.TabIndex = 11;
+            this.checkBoxHGPushAfterCreate.Text = "Push after Creating";
+            this.checkBoxHGPushAfterCreate.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHGPushAfterUpdate
+            // 
+            this.checkBoxHGPushAfterUpdate.AutoSize = true;
+            this.checkBoxHGPushAfterUpdate.Location = new System.Drawing.Point(95, 74);
+            this.checkBoxHGPushAfterUpdate.Name = "checkBoxHGPushAfterUpdate";
+            this.checkBoxHGPushAfterUpdate.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxHGPushAfterUpdate.TabIndex = 12;
+            this.checkBoxHGPushAfterUpdate.Text = "Push after Updating";
+            this.checkBoxHGPushAfterUpdate.UseVisualStyleBackColor = true;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -458,6 +482,8 @@ namespace VersionControlStressTest
         private System.Windows.Forms.Button buttonHGWCBrowse;
         private System.Windows.Forms.TextBox textBoxHGWC;
         private System.Windows.Forms.Label labelHGWC;
+        private System.Windows.Forms.CheckBox checkBoxHGPushAfterCreate;
+        private System.Windows.Forms.CheckBox checkBoxHGPushAfterUpdate;
     }
 }
 
