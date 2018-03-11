@@ -38,7 +38,7 @@ namespace VersionControlStressTest
         {
             try
             {
-                
+
             }
             catch (Exception ex)
             {
@@ -171,11 +171,11 @@ namespace VersionControlStressTest
                     File.WriteAllBytes(filePath, data);
                     #endregion 
 
-                    string[] addLog = (SVNCommit(textBoxSVNWC.Text, string.Format("add {0}", fileName)));
+                    string[] addLog = (SVNCommit(dir, string.Format("add {0}", fileName)));
                     if (addLog != null)
                         log.AddRange(addLog);
 
-                    string[] commit = SVNCommit(textBoxSVNWC.Text, string.Format("commit -m {0}Committing File {1}{0} {1}"
+                    string[] commit = SVNCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
                         , "\""
                         , fileName));
                     if (commit != null)
@@ -332,7 +332,155 @@ namespace VersionControlStressTest
         #endregion
 
         #region HG Methods
+        private void buttonHGWCBrowse_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FolderBrowserDialog diag = new FolderBrowserDialog();
+                DialogResult results = diag.ShowDialog(this);
+                if (results == DialogResult.OK)
+                {
+                    if (!string.IsNullOrEmpty(diag.SelectedPath)
+                        && Directory.Exists(diag.SelectedPath))
+                    {
+                        textBoxHGWC.Text = diag.SelectedPath;
+                    }
+                    else
+                        textBoxHGWC.Text = "";
+                }
+                else
+                    textBoxHGWC.Text = "";
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        #region HG Create Methods
+        private void buttonHGCreate_Click(object sender, EventArgs e)
+        {
+            HGCreate();
+        }
+
+        private void HGCreate()
+        {
+            try
+            {
+                // Validate
+                string dir = textBoxHGWC.Text;
+                if (string.IsNullOrEmpty(dir))
+                {
+                    MessageBox.Show("HG Working Copy location can't be empty.");
+                    return;
+                }
+                else if (!Directory.Exists(dir))
+                {
+                    MessageBox.Show("Selected HG Working Copy doesn't exist.");
+                    return;
+                }
+
+                int fileCount = My_Parse.ParseInt32Or0(textBoxHGFileCount.Text);
+                if (fileCount <= 0)
+                {
+                    MessageBox.Show("Invalid File Count.");
+                    return;
+                }
+
+                int fileSize = My_Parse.ParseInt32Or0(textBoxHGFileSize.Text);
+                if (fileSize <= 0)
+                {
+                    MessageBox.Show("Invalid File Size.");
+                    return;
+                }
+                else if (fileSize > 25)
+                {
+                    MessageBox.Show("File to large.");
+                    return;
+                }
+
+                List<string> log = new List<string>();
+
+                for (int i = 0; i < fileCount; i++)
+                {
+                    #region Random File Generator
+                    string fileName = Guid.NewGuid().ToString() + ".cmw";
+                    string filePath = Path.Combine(dir, fileName);
+                    byte[] data = new byte[fileSize * 1024 * 1024];
+                    Random rng = new Random();
+                    rng.NextBytes(data);
+                    File.WriteAllBytes(filePath, data);
+                    #endregion 
+
+                    string[] addLog = (HGCommit(dir, string.Format("add {0}", fileName)));
+                    if (addLog != null)
+                        log.AddRange(addLog);
+
+                    string[] commit = HGCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
+                        , "\""
+                        , fileName));
+                    if (commit != null)
+                        log.AddRange(commit);
+                }
+
+                MessageBox.Show("Done!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        #endregion
+
+        #region HG Update Methods
+        private void buttonHGUpdate_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
+        private string[] HGCommit(string dir, string hgCommand)
+        {
+            try
+            {
+                ProcessStartInfo cmdInfo = new ProcessStartInfo();
+                Process gitProcess = new Process();
+
+                cmdInfo.CreateNoWindow = true;
+                cmdInfo.UseShellExecute = false;
+                cmdInfo.FileName = @"hg";
+                cmdInfo.Arguments = hgCommand; //command such as "commit -m"
+                cmdInfo.WorkingDirectory = dir;  //repo path
+                cmdInfo.RedirectStandardError = true;
+                cmdInfo.RedirectStandardOutput = true;
+                string[] logRaw = new string[] { };
+
+                using (var proc = new System.Diagnostics.Process())
+                {
+                    proc.StartInfo = cmdInfo;
+                    proc.Start();
+
+                    var output = proc.StandardOutput.ReadToEnd();
+                    var error = proc.StandardError.ReadToEnd();
+
+                    logRaw = string.IsNullOrEmpty(output) && !string.IsNullOrEmpty(error)
+                        ? error.Split('\n').ToArray()
+                        : output.Split('\n').ToArray();
+
+                    proc.WaitForExit();
+                    proc.Close();
+                }
+
+                return logRaw;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            return null;
+        }
         #endregion
 
         #region Worker Methods

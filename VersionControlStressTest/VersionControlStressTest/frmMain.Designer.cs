@@ -293,6 +293,7 @@ namespace VersionControlStressTest
             this.buttonHGUpdate.TabIndex = 3;
             this.buttonHGUpdate.Text = "Update";
             this.buttonHGUpdate.UseVisualStyleBackColor = true;
+            this.buttonHGUpdate.Click += new System.EventHandler(this.buttonHGUpdate_Click);
             // 
             // labelHGUpdateCount
             // 
@@ -367,6 +368,7 @@ namespace VersionControlStressTest
             this.buttonHGCreate.TabIndex = 3;
             this.buttonHGCreate.Text = "Create";
             this.buttonHGCreate.UseVisualStyleBackColor = true;
+            this.buttonHGCreate.Click += new System.EventHandler(this.buttonHGCreate_Click);
             // 
             // buttonHGWCBrowse
             // 
@@ -376,6 +378,7 @@ namespace VersionControlStressTest
             this.buttonHGWCBrowse.TabIndex = 14;
             this.buttonHGWCBrowse.Text = "Browse";
             this.buttonHGWCBrowse.UseVisualStyleBackColor = true;
+            this.buttonHGWCBrowse.Click += new System.EventHandler(this.buttonHGWCBrowse_Click);
             // 
             // textBoxHGWC
             // 
@@ -383,7 +386,7 @@ namespace VersionControlStressTest
             this.textBoxHGWC.Name = "textBoxHGWC";
             this.textBoxHGWC.Size = new System.Drawing.Size(406, 20);
             this.textBoxHGWC.TabIndex = 13;
-            this.textBoxHGWC.Text = "D:\\_repos\\StressTest\\trunk";
+            this.textBoxHGWC.Text = "D:\\_repos\\hgStressssTest\\AutoGen";
             // 
             // labelHGWC
             // 
