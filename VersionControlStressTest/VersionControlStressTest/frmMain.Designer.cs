@@ -47,12 +47,14 @@ namespace VersionControlStressTest
             this.labelSVNWC = new System.Windows.Forms.Label();
             this.tabPageHG = new System.Windows.Forms.TabPage();
             this.groupBoxHGUpdate = new System.Windows.Forms.GroupBox();
+            this.checkBoxHGPushAfterUpdate = new System.Windows.Forms.CheckBox();
             this.labelHGUpdateFileSize = new System.Windows.Forms.Label();
             this.textBoxHGUpdateFileSize = new System.Windows.Forms.TextBox();
             this.buttonHGUpdate = new System.Windows.Forms.Button();
             this.labelHGUpdateCount = new System.Windows.Forms.Label();
             this.textBoxHGUpdateCount = new System.Windows.Forms.TextBox();
             this.groupBoxHGCreate = new System.Windows.Forms.GroupBox();
+            this.checkBoxHGPushAfterCreate = new System.Windows.Forms.CheckBox();
             this.labelHGFileSize = new System.Windows.Forms.Label();
             this.textBoxHGFileSize = new System.Windows.Forms.TextBox();
             this.labelHGFileCount = new System.Windows.Forms.Label();
@@ -61,8 +63,6 @@ namespace VersionControlStressTest
             this.buttonHGWCBrowse = new System.Windows.Forms.Button();
             this.textBoxHGWC = new System.Windows.Forms.TextBox();
             this.labelHGWC = new System.Windows.Forms.Label();
-            this.checkBoxHGPushAfterCreate = new System.Windows.Forms.CheckBox();
-            this.checkBoxHGPushAfterUpdate = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageSVN.SuspendLayout();
             this.groupBoxSVNUpdate.SuspendLayout();
@@ -230,7 +230,6 @@ namespace VersionControlStressTest
             this.textBoxSVNWC.Name = "textBoxSVNWC";
             this.textBoxSVNWC.Size = new System.Drawing.Size(406, 20);
             this.textBoxSVNWC.TabIndex = 5;
-            this.textBoxSVNWC.Text = "D:\\_repos\\StressTest\\trunk";
             // 
             // labelSVNWC
             // 
@@ -270,6 +269,16 @@ namespace VersionControlStressTest
             this.groupBoxHGUpdate.TabIndex = 16;
             this.groupBoxHGUpdate.TabStop = false;
             this.groupBoxHGUpdate.Text = "Update Files";
+            // 
+            // checkBoxHGPushAfterUpdate
+            // 
+            this.checkBoxHGPushAfterUpdate.AutoSize = true;
+            this.checkBoxHGPushAfterUpdate.Location = new System.Drawing.Point(95, 74);
+            this.checkBoxHGPushAfterUpdate.Name = "checkBoxHGPushAfterUpdate";
+            this.checkBoxHGPushAfterUpdate.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxHGPushAfterUpdate.TabIndex = 12;
+            this.checkBoxHGPushAfterUpdate.Text = "Push after Updating";
+            this.checkBoxHGPushAfterUpdate.UseVisualStyleBackColor = true;
             // 
             // labelHGUpdateFileSize
             // 
@@ -329,6 +338,16 @@ namespace VersionControlStressTest
             this.groupBoxHGCreate.TabIndex = 15;
             this.groupBoxHGCreate.TabStop = false;
             this.groupBoxHGCreate.Text = "Create Files";
+            // 
+            // checkBoxHGPushAfterCreate
+            // 
+            this.checkBoxHGPushAfterCreate.AutoSize = true;
+            this.checkBoxHGPushAfterCreate.Location = new System.Drawing.Point(90, 75);
+            this.checkBoxHGPushAfterCreate.Name = "checkBoxHGPushAfterCreate";
+            this.checkBoxHGPushAfterCreate.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxHGPushAfterCreate.TabIndex = 11;
+            this.checkBoxHGPushAfterCreate.Text = "Push after Creating";
+            this.checkBoxHGPushAfterCreate.UseVisualStyleBackColor = true;
             // 
             // labelHGFileSize
             // 
@@ -390,7 +409,6 @@ namespace VersionControlStressTest
             this.textBoxHGWC.Name = "textBoxHGWC";
             this.textBoxHGWC.Size = new System.Drawing.Size(406, 20);
             this.textBoxHGWC.TabIndex = 13;
-            this.textBoxHGWC.Text = "D:\\_repos\\hgStressssTest\\AutoGen";
             // 
             // labelHGWC
             // 
@@ -400,26 +418,6 @@ namespace VersionControlStressTest
             this.labelHGWC.Size = new System.Drawing.Size(77, 13);
             this.labelHGWC.TabIndex = 12;
             this.labelHGWC.Text = "Working Copy:";
-            // 
-            // checkBoxHGPushAfterCreate
-            // 
-            this.checkBoxHGPushAfterCreate.AutoSize = true;
-            this.checkBoxHGPushAfterCreate.Location = new System.Drawing.Point(90, 75);
-            this.checkBoxHGPushAfterCreate.Name = "checkBoxHGPushAfterCreate";
-            this.checkBoxHGPushAfterCreate.Size = new System.Drawing.Size(116, 17);
-            this.checkBoxHGPushAfterCreate.TabIndex = 11;
-            this.checkBoxHGPushAfterCreate.Text = "Push after Creating";
-            this.checkBoxHGPushAfterCreate.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxHGPushAfterUpdate
-            // 
-            this.checkBoxHGPushAfterUpdate.AutoSize = true;
-            this.checkBoxHGPushAfterUpdate.Location = new System.Drawing.Point(95, 74);
-            this.checkBoxHGPushAfterUpdate.Name = "checkBoxHGPushAfterUpdate";
-            this.checkBoxHGPushAfterUpdate.Size = new System.Drawing.Size(120, 17);
-            this.checkBoxHGPushAfterUpdate.TabIndex = 12;
-            this.checkBoxHGPushAfterUpdate.Text = "Push after Updating";
-            this.checkBoxHGPushAfterUpdate.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
