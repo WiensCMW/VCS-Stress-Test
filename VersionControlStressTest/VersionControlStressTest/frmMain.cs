@@ -225,7 +225,7 @@ namespace VersionControlStressTest
                     return;
                 }
 
-                int fileSize = My_Parse.ParseInt32Or0(textBoxSVNFileSize.Text);
+                int fileSize = My_Parse.ParseInt32Or0(textBoxSVNUpdateFileSize.Text);
                 if (fileSize <= 0)
                 {
                     MessageBox.Show("Invalid File Size.");
@@ -269,7 +269,7 @@ namespace VersionControlStressTest
                         #endregion
                     }
 
-                    string[] commit = SVNCommit(textBoxSVNWC.Text, string.Format("commit -m {0}Updated Files {1}{0}"
+                    string[] commit = SVNCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
                         , "\""
                         , string.Join(", ", files.Select(j => j.Name))));
                     if (commit != null)
@@ -436,7 +436,91 @@ namespace VersionControlStressTest
         #region HG Update Methods
         private void buttonHGUpdate_Click(object sender, EventArgs e)
         {
+            HGUpdate();
+        }
 
+        private void HGUpdate()
+        {
+            try
+            {
+                #region Validate
+                // Validate
+                string dir = textBoxHGWC.Text;
+                if (string.IsNullOrEmpty(dir))
+                {
+                    MessageBox.Show("HG Working Copy location can't be empty.");
+                    return;
+                }
+                else if (!Directory.Exists(dir))
+                {
+                    MessageBox.Show("Selected HG Working Copy doesn't exist.");
+                    return;
+                }
+
+                int updateCount = My_Parse.ParseInt32Or0(textBoxHGUpdateCount.Text);
+                if (updateCount <= 0)
+                {
+                    MessageBox.Show("Invalid File Count.");
+                    return;
+                }
+
+                int fileSize = My_Parse.ParseInt32Or0(textBoxHGUpdateFileSize.Text);
+                if (fileSize <= 0)
+                {
+                    MessageBox.Show("Invalid File Size.");
+                    return;
+                }
+                else if (fileSize > 25)
+                {
+                    MessageBox.Show("File to large.");
+                    return;
+                }
+                #endregion
+
+                #region Get list of valid Files in Working Copy
+                string[] fileList = Directory.GetFiles(dir);
+                List<FileInfo> files = new List<FileInfo>();
+                for (int i = 0; i < fileList.Length; i++)
+                {
+                    FileInfo file = new FileInfo(fileList[i]);
+                    if (file.Exists)
+                    {
+                        // Make sure the file name is a valid Guid
+                        Guid? fileName = My_Parse.ParseGuidOrNull(file.Name.Replace(file.Extension, ""));
+                        if (fileName.HasValue)
+                            files.Add(file);
+                    }
+                }
+                #endregion
+
+                // Loop through valid files, override them with new data and commit to svn
+                List<string> log = new List<string>();
+
+                for (int x = 0; x < updateCount; x++)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        #region Random File Generator
+                        byte[] data = new byte[fileSize * 1024 * 1024];
+                        Random rng = new Random();
+                        rng.NextBytes(data);
+                        File.WriteAllBytes(files[i].FullName, data);
+                        #endregion
+                    }
+
+                    string[] commit = HGCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
+                        , "\""
+                        , string.Join(", ", files.Select(j => j.Name))));
+                    if (commit != null)
+                        log.AddRange(commit);
+                }
+
+                MessageBox.Show("Done!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         #endregion
 
