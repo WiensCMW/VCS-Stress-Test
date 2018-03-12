@@ -30,24 +30,24 @@ namespace VersionControlStressTest
         {
             this.buttonCreate = new System.Windows.Forms.Button();
             this.groupBoxUpdate = new System.Windows.Forms.GroupBox();
+            this.checkBoxPushAfterUpdate = new System.Windows.Forms.CheckBox();
             this.labelUpdateFileSize = new System.Windows.Forms.Label();
             this.textBoxUpdateFileSize = new System.Windows.Forms.TextBox();
             this.buttonUpdate = new System.Windows.Forms.Button();
             this.labelUpdateCount = new System.Windows.Forms.Label();
             this.textBoxUpdateCount = new System.Windows.Forms.TextBox();
             this.groupBoxCreate = new System.Windows.Forms.GroupBox();
+            this.checkBoxPushAfterCreate = new System.Windows.Forms.CheckBox();
             this.labelFileSize = new System.Windows.Forms.Label();
-            this.textBoxFileSize = new System.Windows.Forms.TextBox();
+            this.textBoxCreateFileSize = new System.Windows.Forms.TextBox();
             this.labelFileCount = new System.Windows.Forms.Label();
-            this.textBoxFileCount = new System.Windows.Forms.TextBox();
+            this.textBoxCreateFileCount = new System.Windows.Forms.TextBox();
             this.buttonSVNWCBrowse = new System.Windows.Forms.Button();
             this.textBoxSVNWC = new System.Windows.Forms.TextBox();
             this.labelSVNWC = new System.Windows.Forms.Label();
             this.groupBoxSystem = new System.Windows.Forms.GroupBox();
             this.labelSystem = new System.Windows.Forms.Label();
             this.comboBoxSystem = new System.Windows.Forms.ComboBox();
-            this.checkBoxPushAfterCreate = new System.Windows.Forms.CheckBox();
-            this.checkBoxPushAfterUpdate = new System.Windows.Forms.CheckBox();
             this.groupBoxUpdate.SuspendLayout();
             this.groupBoxCreate.SuspendLayout();
             this.groupBoxSystem.SuspendLayout();
@@ -61,7 +61,7 @@ namespace VersionControlStressTest
             this.buttonCreate.TabIndex = 3;
             this.buttonCreate.Text = "Create";
             this.buttonCreate.UseVisualStyleBackColor = true;
-            this.buttonCreate.Click += new System.EventHandler(this.buttonSVNCreate_Click);
+            this.buttonCreate.Click += new System.EventHandler(this.buttonCreate_Click);
             // 
             // groupBoxUpdate
             // 
@@ -79,6 +79,16 @@ namespace VersionControlStressTest
             this.groupBoxUpdate.TabIndex = 11;
             this.groupBoxUpdate.TabStop = false;
             this.groupBoxUpdate.Text = "Update Files";
+            // 
+            // checkBoxPushAfterUpdate
+            // 
+            this.checkBoxPushAfterUpdate.AutoSize = true;
+            this.checkBoxPushAfterUpdate.Location = new System.Drawing.Point(95, 74);
+            this.checkBoxPushAfterUpdate.Name = "checkBoxPushAfterUpdate";
+            this.checkBoxPushAfterUpdate.Size = new System.Drawing.Size(112, 17);
+            this.checkBoxPushAfterUpdate.TabIndex = 12;
+            this.checkBoxPushAfterUpdate.Text = "Push after Update";
+            this.checkBoxPushAfterUpdate.UseVisualStyleBackColor = true;
             // 
             // labelUpdateFileSize
             // 
@@ -105,7 +115,7 @@ namespace VersionControlStressTest
             this.buttonUpdate.TabIndex = 3;
             this.buttonUpdate.Text = "Update";
             this.buttonUpdate.UseVisualStyleBackColor = true;
-            this.buttonUpdate.Click += new System.EventHandler(this.buttonSVNUpdate_Click);
+            this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
             // labelUpdateCount
             // 
@@ -130,9 +140,9 @@ namespace VersionControlStressTest
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxCreate.Controls.Add(this.checkBoxPushAfterCreate);
             this.groupBoxCreate.Controls.Add(this.labelFileSize);
-            this.groupBoxCreate.Controls.Add(this.textBoxFileSize);
+            this.groupBoxCreate.Controls.Add(this.textBoxCreateFileSize);
             this.groupBoxCreate.Controls.Add(this.labelFileCount);
-            this.groupBoxCreate.Controls.Add(this.textBoxFileCount);
+            this.groupBoxCreate.Controls.Add(this.textBoxCreateFileCount);
             this.groupBoxCreate.Controls.Add(this.buttonCreate);
             this.groupBoxCreate.Location = new System.Drawing.Point(12, 88);
             this.groupBoxCreate.Name = "groupBoxCreate";
@@ -140,6 +150,16 @@ namespace VersionControlStressTest
             this.groupBoxCreate.TabIndex = 7;
             this.groupBoxCreate.TabStop = false;
             this.groupBoxCreate.Text = "Create Files";
+            // 
+            // checkBoxPushAfterCreate
+            // 
+            this.checkBoxPushAfterCreate.AutoSize = true;
+            this.checkBoxPushAfterCreate.Location = new System.Drawing.Point(95, 75);
+            this.checkBoxPushAfterCreate.Name = "checkBoxPushAfterCreate";
+            this.checkBoxPushAfterCreate.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxPushAfterCreate.TabIndex = 11;
+            this.checkBoxPushAfterCreate.Text = "Push after Creating";
+            this.checkBoxPushAfterCreate.UseVisualStyleBackColor = true;
             // 
             // labelFileSize
             // 
@@ -150,13 +170,13 @@ namespace VersionControlStressTest
             this.labelFileSize.TabIndex = 9;
             this.labelFileSize.Text = "Size of File:";
             // 
-            // textBoxFileSize
+            // textBoxCreateFileSize
             // 
-            this.textBoxFileSize.Location = new System.Drawing.Point(95, 42);
-            this.textBoxFileSize.Name = "textBoxFileSize";
-            this.textBoxFileSize.Size = new System.Drawing.Size(49, 20);
-            this.textBoxFileSize.TabIndex = 10;
-            this.textBoxFileSize.Text = "2";
+            this.textBoxCreateFileSize.Location = new System.Drawing.Point(95, 42);
+            this.textBoxCreateFileSize.Name = "textBoxCreateFileSize";
+            this.textBoxCreateFileSize.Size = new System.Drawing.Size(49, 20);
+            this.textBoxCreateFileSize.TabIndex = 10;
+            this.textBoxCreateFileSize.Text = "2";
             // 
             // labelFileCount
             // 
@@ -167,13 +187,13 @@ namespace VersionControlStressTest
             this.labelFileCount.TabIndex = 8;
             this.labelFileCount.Text = "Number of Files:";
             // 
-            // textBoxFileCount
+            // textBoxCreateFileCount
             // 
-            this.textBoxFileCount.Location = new System.Drawing.Point(95, 16);
-            this.textBoxFileCount.Name = "textBoxFileCount";
-            this.textBoxFileCount.Size = new System.Drawing.Size(49, 20);
-            this.textBoxFileCount.TabIndex = 8;
-            this.textBoxFileCount.Text = "10";
+            this.textBoxCreateFileCount.Location = new System.Drawing.Point(95, 16);
+            this.textBoxCreateFileCount.Name = "textBoxCreateFileCount";
+            this.textBoxCreateFileCount.Size = new System.Drawing.Size(49, 20);
+            this.textBoxCreateFileCount.TabIndex = 8;
+            this.textBoxCreateFileCount.Text = "10";
             // 
             // buttonSVNWCBrowse
             // 
@@ -239,26 +259,6 @@ namespace VersionControlStressTest
             this.comboBoxSystem.TabIndex = 0;
             this.comboBoxSystem.SelectedIndexChanged += new System.EventHandler(this.comboBoxSystem_SelectedIndexChanged);
             // 
-            // checkBoxPushAfterCreate
-            // 
-            this.checkBoxPushAfterCreate.AutoSize = true;
-            this.checkBoxPushAfterCreate.Location = new System.Drawing.Point(95, 75);
-            this.checkBoxPushAfterCreate.Name = "checkBoxPushAfterCreate";
-            this.checkBoxPushAfterCreate.Size = new System.Drawing.Size(116, 17);
-            this.checkBoxPushAfterCreate.TabIndex = 11;
-            this.checkBoxPushAfterCreate.Text = "Push after Creating";
-            this.checkBoxPushAfterCreate.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxPushAfterUpdate
-            // 
-            this.checkBoxPushAfterUpdate.AutoSize = true;
-            this.checkBoxPushAfterUpdate.Location = new System.Drawing.Point(95, 74);
-            this.checkBoxPushAfterUpdate.Name = "checkBoxPushAfterUpdate";
-            this.checkBoxPushAfterUpdate.Size = new System.Drawing.Size(112, 17);
-            this.checkBoxPushAfterUpdate.TabIndex = 12;
-            this.checkBoxPushAfterUpdate.Text = "Push after Update";
-            this.checkBoxPushAfterUpdate.UseVisualStyleBackColor = true;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -292,9 +292,9 @@ namespace VersionControlStressTest
         private System.Windows.Forms.Label labelSVNWC;
         private System.Windows.Forms.GroupBox groupBoxCreate;
         private System.Windows.Forms.Label labelFileCount;
-        private System.Windows.Forms.TextBox textBoxFileCount;
+        private System.Windows.Forms.TextBox textBoxCreateFileCount;
         private System.Windows.Forms.Label labelFileSize;
-        private System.Windows.Forms.TextBox textBoxFileSize;
+        private System.Windows.Forms.TextBox textBoxCreateFileSize;
         private System.Windows.Forms.GroupBox groupBoxUpdate;
         private System.Windows.Forms.Label labelUpdateFileSize;
         private System.Windows.Forms.TextBox textBoxUpdateFileSize;
