@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
+using VersionControlStressTest.Properties;
 
 namespace VersionControlStressTest
 {
@@ -38,7 +39,8 @@ namespace VersionControlStressTest
         {
             try
             {
-
+                if (!string.IsNullOrEmpty(Settings.Default.Directory))
+                    textBoxSVNWC.Text = Settings.Default.Directory;
             }
             catch (Exception ex)
             {
@@ -152,7 +154,11 @@ namespace VersionControlStressTest
                             textBoxSVNWC.Text = "";
                         }
                         else
+                        {
                             textBoxSVNWC.Text = diag.SelectedPath;
+                            Settings.Default.Directory = diag.SelectedPath;
+                            Settings.Default.Save();
+                        }
                     }
                     else
                         textBoxSVNWC.Text = "";
