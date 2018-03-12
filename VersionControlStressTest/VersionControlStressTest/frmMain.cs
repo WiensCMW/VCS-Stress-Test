@@ -39,8 +39,12 @@ namespace VersionControlStressTest
         {
             try
             {
+                // Restore saved settings
                 if (!string.IsNullOrEmpty(Settings.Default.Directory))
                     textBoxSVNWC.Text = Settings.Default.Directory;
+
+                if (Settings.Default.SelectedSystem <= (comboBoxSystem.Items.Count - 1))
+                    comboBoxSystem.SelectedIndex = Settings.Default.SelectedSystem;
             }
             catch (Exception ex)
             {
@@ -131,9 +135,53 @@ namespace VersionControlStressTest
 
             return false;
         }
+
+        private void comboBoxSystem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                // Save selected system
+                Settings.Default.SelectedSystem = comboBoxSystem.SelectedIndex;
+                Settings.Default.Save();
+
+                SetFormControls();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SetFormControls()
+        {
+            try
+            {
+                switch (comboBoxSystem.SelectedIndex)
+                {
+                    case 0:
+                        {
+                            checkBoxPushAfterCreate.Visible = false;
+                            checkBoxPushAfterUpdate.Visible = false;
+                            break;
+                        }
+                    case 1:
+                        {
+                            checkBoxPushAfterCreate.Visible = true;
+                            checkBoxPushAfterUpdate.Visible = true;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         #endregion
 
-        #region SVN Methods
+        #region VSC Methods
         private void buttonSVNWCBrowse_Click(object sender, EventArgs e)
         {
             try
@@ -176,10 +224,10 @@ namespace VersionControlStressTest
         #region SVN Create Methods
         private void buttonSVNCreate_Click(object sender, EventArgs e)
         {
-            SVNCreate();
+            VCSCreate();
         }
 
-        private void SVNCreate()
+        private void VCSCreate()
         {
             try
             {
@@ -196,14 +244,14 @@ namespace VersionControlStressTest
                     return;
                 }
 
-                int fileCount = My_Parse.ParseInt32Or0(textBoxSVNFilesCount.Text);
+                int fileCount = My_Parse.ParseInt32Or0(textBoxFileCount.Text);
                 if (fileCount <= 0)
                 {
                     MessageBox.Show("Invalid File Count.");
                     return;
                 }
 
-                int fileSize = My_Parse.ParseInt32Or0(textBoxSVNFileSize.Text);
+                int fileSize = My_Parse.ParseInt32Or0(textBoxFileSize.Text);
                 if (fileSize <= 0)
                 {
                     MessageBox.Show("Invalid File Size.");
@@ -228,11 +276,11 @@ namespace VersionControlStressTest
                     File.WriteAllBytes(filePath, data);
                     #endregion 
 
-                    string[] addLog = (SVNCommit(dir, string.Format("add {0}", fileName)));
+                    string[] addLog = (VCSCommit(dir, string.Format("add {0}", fileName)));
                     if (addLog != null)
                         log.AddRange(addLog);
 
-                    string[] commit = SVNCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
+                    string[] commit = VCSCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
                         , "\""
                         , fileName));
                     if (commit != null)
@@ -254,10 +302,10 @@ namespace VersionControlStressTest
         #region SVN Update Methods
         private void buttonSVNUpdate_Click(object sender, EventArgs e)
         {
-            SVNUpdate();
+            VCSUpdate();
         }
 
-        private void SVNUpdate()
+        private void VCSUpdate()
         {
             try
             {
@@ -275,14 +323,14 @@ namespace VersionControlStressTest
                     return;
                 }
 
-                int updateCount = My_Parse.ParseInt32Or0(textBoxSVNUpdateCount.Text);
+                int updateCount = My_Parse.ParseInt32Or0(textBoxUpdateCount.Text);
                 if (updateCount <= 0)
                 {
                     MessageBox.Show("Invalid File Count.");
                     return;
                 }
 
-                int fileSize = My_Parse.ParseInt32Or0(textBoxSVNUpdateFileSize.Text);
+                int fileSize = My_Parse.ParseInt32Or0(textBoxUpdateFileSize.Text);
                 if (fileSize <= 0)
                 {
                     MessageBox.Show("Invalid File Size.");
@@ -326,7 +374,7 @@ namespace VersionControlStressTest
                         #endregion
                     }
 
-                    string[] commit = SVNCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
+                    string[] commit = VCSCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
                         , "\""
                         , string.Join(", ", files.Select(j => j.Name))));
                     if (commit != null)
@@ -345,7 +393,7 @@ namespace VersionControlStressTest
         }
         #endregion
 
-        private string[] SVNCommit(string dir, string svnCommand)
+        private string[] VCSCommit(string dir, string svnCommand)
         {
             try
             {
@@ -389,253 +437,253 @@ namespace VersionControlStressTest
         #endregion
 
         #region HG Methods
-        private void buttonHGWCBrowse_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                FolderBrowserDialog diag = new FolderBrowserDialog();
-                DialogResult results = diag.ShowDialog(this);
-                if (results == DialogResult.OK)
-                {
-                    if (!string.IsNullOrEmpty(diag.SelectedPath)
-                        && Directory.Exists(diag.SelectedPath))
-                    {
-                        textBoxHGWC.Text = diag.SelectedPath;
-                    }
-                    else
-                        textBoxHGWC.Text = "";
-                }
-                else
-                    textBoxHGWC.Text = "";
+        //private void buttonHGWCBrowse_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        FolderBrowserDialog diag = new FolderBrowserDialog();
+        //        DialogResult results = diag.ShowDialog(this);
+        //        if (results == DialogResult.OK)
+        //        {
+        //            if (!string.IsNullOrEmpty(diag.SelectedPath)
+        //                && Directory.Exists(diag.SelectedPath))
+        //            {
+        //                textBoxHGWC.Text = diag.SelectedPath;
+        //            }
+        //            else
+        //                textBoxHGWC.Text = "";
+        //        }
+        //        else
+        //            textBoxHGWC.Text = "";
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
 
-        #region HG Create Methods
-        private void buttonHGCreate_Click(object sender, EventArgs e)
-        {
-            HGCreate();
-        }
+        //#region HG Create Methods
+        //private void buttonHGCreate_Click(object sender, EventArgs e)
+        //{
+        //    HGCreate();
+        //}
 
-        private void HGCreate()
-        {
-            try
-            {
-                // Validate
-                string dir = textBoxHGWC.Text;
-                if (string.IsNullOrEmpty(dir))
-                {
-                    MessageBox.Show("HG Working Copy location can't be empty.");
-                    return;
-                }
-                else if (!Directory.Exists(dir))
-                {
-                    MessageBox.Show("Selected HG Working Copy doesn't exist.");
-                    return;
-                }
+        //private void HGCreate()
+        //{
+        //    try
+        //    {
+        //        // Validate
+        //        string dir = textBoxHGWC.Text;
+        //        if (string.IsNullOrEmpty(dir))
+        //        {
+        //            MessageBox.Show("HG Working Copy location can't be empty.");
+        //            return;
+        //        }
+        //        else if (!Directory.Exists(dir))
+        //        {
+        //            MessageBox.Show("Selected HG Working Copy doesn't exist.");
+        //            return;
+        //        }
 
-                int fileCount = My_Parse.ParseInt32Or0(textBoxHGFileCount.Text);
-                if (fileCount <= 0)
-                {
-                    MessageBox.Show("Invalid File Count.");
-                    return;
-                }
+        //        int fileCount = My_Parse.ParseInt32Or0(textBoxHGFileCount.Text);
+        //        if (fileCount <= 0)
+        //        {
+        //            MessageBox.Show("Invalid File Count.");
+        //            return;
+        //        }
 
-                int fileSize = My_Parse.ParseInt32Or0(textBoxHGFileSize.Text);
-                if (fileSize <= 0)
-                {
-                    MessageBox.Show("Invalid File Size.");
-                    return;
-                }
-                else if (fileSize > 25)
-                {
-                    MessageBox.Show("File to large.");
-                    return;
-                }
+        //        int fileSize = My_Parse.ParseInt32Or0(textBoxHGFileSize.Text);
+        //        if (fileSize <= 0)
+        //        {
+        //            MessageBox.Show("Invalid File Size.");
+        //            return;
+        //        }
+        //        else if (fileSize > 25)
+        //        {
+        //            MessageBox.Show("File to large.");
+        //            return;
+        //        }
 
-                List<string> log = new List<string>();
+        //        List<string> log = new List<string>();
 
-                for (int i = 0; i < fileCount; i++)
-                {
-                    #region Random File Generator
-                    string fileName = Guid.NewGuid().ToString() + ".cmw";
-                    string filePath = Path.Combine(dir, fileName);
-                    byte[] data = new byte[fileSize * 1024 * 1024];
-                    Random rng = new Random();
-                    rng.NextBytes(data);
-                    File.WriteAllBytes(filePath, data);
-                    #endregion 
+        //        for (int i = 0; i < fileCount; i++)
+        //        {
+        //            #region Random File Generator
+        //            string fileName = Guid.NewGuid().ToString() + ".cmw";
+        //            string filePath = Path.Combine(dir, fileName);
+        //            byte[] data = new byte[fileSize * 1024 * 1024];
+        //            Random rng = new Random();
+        //            rng.NextBytes(data);
+        //            File.WriteAllBytes(filePath, data);
+        //            #endregion 
 
-                    string[] addLog = (HGCommit(dir, string.Format("add {0}", fileName)));
-                    if (addLog != null)
-                        log.AddRange(addLog);
+        //            string[] addLog = (HGCommit(dir, string.Format("add {0}", fileName)));
+        //            if (addLog != null)
+        //                log.AddRange(addLog);
 
-                    string[] commit = HGCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
-                        , "\""
-                        , fileName));
-                    if (commit != null)
-                        log.AddRange(commit);
-                }
+        //            string[] commit = HGCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
+        //                , "\""
+        //                , fileName));
+        //            if (commit != null)
+        //                log.AddRange(commit);
+        //        }
 
-                if (checkBoxHGPushAfterCreate.Checked)
-                {
-                    string[] commit = HGCommit(dir, string.Format("push"));
-                    if (commit != null)
-                        log.AddRange(commit);
-                }
+        //        if (checkBoxHGPushAfterCreate.Checked)
+        //        {
+        //            string[] commit = HGCommit(dir, string.Format("push"));
+        //            if (commit != null)
+        //                log.AddRange(commit);
+        //        }
 
-                MessageBox.Show("Done!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-        #endregion
+        //        MessageBox.Show("Done!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
+        //}
+        //#endregion
 
-        #region HG Update Methods
-        private void buttonHGUpdate_Click(object sender, EventArgs e)
-        {
-            HGUpdate();
-        }
+        //#region HG Update Methods
+        //private void buttonHGUpdate_Click(object sender, EventArgs e)
+        //{
+        //    HGUpdate();
+        //}
 
-        private void HGUpdate()
-        {
-            try
-            {
-                #region Validate
-                // Validate
-                string dir = textBoxHGWC.Text;
-                if (string.IsNullOrEmpty(dir))
-                {
-                    MessageBox.Show("HG Working Copy location can't be empty.");
-                    return;
-                }
-                else if (!Directory.Exists(dir))
-                {
-                    MessageBox.Show("Selected HG Working Copy doesn't exist.");
-                    return;
-                }
+        //private void HGUpdate()
+        //{
+        //    try
+        //    {
+        //        #region Validate
+        //        // Validate
+        //        string dir = textBoxHGWC.Text;
+        //        if (string.IsNullOrEmpty(dir))
+        //        {
+        //            MessageBox.Show("HG Working Copy location can't be empty.");
+        //            return;
+        //        }
+        //        else if (!Directory.Exists(dir))
+        //        {
+        //            MessageBox.Show("Selected HG Working Copy doesn't exist.");
+        //            return;
+        //        }
 
-                int updateCount = My_Parse.ParseInt32Or0(textBoxHGUpdateCount.Text);
-                if (updateCount <= 0)
-                {
-                    MessageBox.Show("Invalid File Count.");
-                    return;
-                }
+        //        int updateCount = My_Parse.ParseInt32Or0(textBoxHGUpdateCount.Text);
+        //        if (updateCount <= 0)
+        //        {
+        //            MessageBox.Show("Invalid File Count.");
+        //            return;
+        //        }
 
-                int fileSize = My_Parse.ParseInt32Or0(textBoxHGUpdateFileSize.Text);
-                if (fileSize <= 0)
-                {
-                    MessageBox.Show("Invalid File Size.");
-                    return;
-                }
-                else if (fileSize > 25)
-                {
-                    MessageBox.Show("File to large.");
-                    return;
-                }
-                #endregion
+        //        int fileSize = My_Parse.ParseInt32Or0(textBoxHGUpdateFileSize.Text);
+        //        if (fileSize <= 0)
+        //        {
+        //            MessageBox.Show("Invalid File Size.");
+        //            return;
+        //        }
+        //        else if (fileSize > 25)
+        //        {
+        //            MessageBox.Show("File to large.");
+        //            return;
+        //        }
+        //        #endregion
 
-                #region Get list of valid Files in Working Copy
-                string[] fileList = Directory.GetFiles(dir);
-                List<FileInfo> files = new List<FileInfo>();
-                for (int i = 0; i < fileList.Length; i++)
-                {
-                    FileInfo file = new FileInfo(fileList[i]);
-                    if (file.Exists)
-                    {
-                        // Make sure the file name is a valid Guid
-                        Guid? fileName = My_Parse.ParseGuidOrNull(file.Name.Replace(file.Extension, ""));
-                        if (fileName.HasValue)
-                            files.Add(file);
-                    }
-                }
-                #endregion
+        //        #region Get list of valid Files in Working Copy
+        //        string[] fileList = Directory.GetFiles(dir);
+        //        List<FileInfo> files = new List<FileInfo>();
+        //        for (int i = 0; i < fileList.Length; i++)
+        //        {
+        //            FileInfo file = new FileInfo(fileList[i]);
+        //            if (file.Exists)
+        //            {
+        //                // Make sure the file name is a valid Guid
+        //                Guid? fileName = My_Parse.ParseGuidOrNull(file.Name.Replace(file.Extension, ""));
+        //                if (fileName.HasValue)
+        //                    files.Add(file);
+        //            }
+        //        }
+        //        #endregion
 
-                // Loop through valid files, override them with new data and commit to svn
-                List<string> log = new List<string>();
+        //        // Loop through valid files, override them with new data and commit to svn
+        //        List<string> log = new List<string>();
 
-                for (int x = 0; x < updateCount; x++)
-                {
-                    for (int i = 0; i < files.Count; i++)
-                    {
-                        #region Random File Generator
-                        byte[] data = new byte[fileSize * 1024 * 1024];
-                        Random rng = new Random();
-                        rng.NextBytes(data);
-                        File.WriteAllBytes(files[i].FullName, data);
-                        #endregion
-                    }
+        //        for (int x = 0; x < updateCount; x++)
+        //        {
+        //            for (int i = 0; i < files.Count; i++)
+        //            {
+        //                #region Random File Generator
+        //                byte[] data = new byte[fileSize * 1024 * 1024];
+        //                Random rng = new Random();
+        //                rng.NextBytes(data);
+        //                File.WriteAllBytes(files[i].FullName, data);
+        //                #endregion
+        //            }
 
-                    string[] commit = HGCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
-                        , "\""
-                        , string.Join(", ", files.Select(j => j.Name))));
-                    if (commit != null)
-                        log.AddRange(commit);
-                }
+        //            string[] commit = HGCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
+        //                , "\""
+        //                , string.Join(", ", files.Select(j => j.Name))));
+        //            if (commit != null)
+        //                log.AddRange(commit);
+        //        }
 
-                if (checkBoxHGPushAfterUpdate.Checked)
-                {
-                    string[] commit = HGCommit(dir, string.Format("push"));
-                    if (commit != null)
-                        log.AddRange(commit);
-                }
+        //        if (checkBoxHGPushAfterUpdate.Checked)
+        //        {
+        //            string[] commit = HGCommit(dir, string.Format("push"));
+        //            if (commit != null)
+        //                log.AddRange(commit);
+        //        }
 
-                MessageBox.Show("Done!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-        #endregion
+        //        MessageBox.Show("Done!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
+        //}
+        //#endregion
 
-        private string[] HGCommit(string dir, string hgCommand)
-        {
-            try
-            {
-                ProcessStartInfo cmdInfo = new ProcessStartInfo();
-                Process gitProcess = new Process();
+        //private string[] HGCommit(string dir, string hgCommand)
+        //{
+        //    try
+        //    {
+        //        ProcessStartInfo cmdInfo = new ProcessStartInfo();
+        //        Process gitProcess = new Process();
 
-                cmdInfo.CreateNoWindow = true;
-                cmdInfo.UseShellExecute = false;
-                cmdInfo.FileName = @"hg";
-                cmdInfo.Arguments = hgCommand; //command such as "commit -m"
-                cmdInfo.WorkingDirectory = dir;  //repo path
-                cmdInfo.RedirectStandardError = true;
-                cmdInfo.RedirectStandardOutput = true;
-                string[] logRaw = new string[] { };
+        //        cmdInfo.CreateNoWindow = true;
+        //        cmdInfo.UseShellExecute = false;
+        //        cmdInfo.FileName = @"hg";
+        //        cmdInfo.Arguments = hgCommand; //command such as "commit -m"
+        //        cmdInfo.WorkingDirectory = dir;  //repo path
+        //        cmdInfo.RedirectStandardError = true;
+        //        cmdInfo.RedirectStandardOutput = true;
+        //        string[] logRaw = new string[] { };
 
-                using (var proc = new System.Diagnostics.Process())
-                {
-                    proc.StartInfo = cmdInfo;
-                    proc.Start();
+        //        using (var proc = new System.Diagnostics.Process())
+        //        {
+        //            proc.StartInfo = cmdInfo;
+        //            proc.Start();
 
-                    var output = proc.StandardOutput.ReadToEnd();
-                    var error = proc.StandardError.ReadToEnd();
+        //            var output = proc.StandardOutput.ReadToEnd();
+        //            var error = proc.StandardError.ReadToEnd();
 
-                    logRaw = string.IsNullOrEmpty(output) && !string.IsNullOrEmpty(error)
-                        ? error.Split('\n').ToArray()
-                        : output.Split('\n').ToArray();
+        //            logRaw = string.IsNullOrEmpty(output) && !string.IsNullOrEmpty(error)
+        //                ? error.Split('\n').ToArray()
+        //                : output.Split('\n').ToArray();
 
-                    proc.WaitForExit();
-                    proc.Close();
-                }
+        //            proc.WaitForExit();
+        //            proc.Close();
+        //        }
 
-                return logRaw;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+        //        return logRaw;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString(), "Invalid Directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
         #endregion
 
         #region Worker Methods

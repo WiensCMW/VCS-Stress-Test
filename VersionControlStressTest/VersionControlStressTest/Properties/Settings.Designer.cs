@@ -34,5 +34,17 @@ namespace VersionControlStressTest.Properties {
                 this["Directory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SelectedSystem {
+            get {
+                return ((int)(this["SelectedSystem"]));
+            }
+            set {
+                this["SelectedSystem"] = value;
+            }
+        }
     }
 }
