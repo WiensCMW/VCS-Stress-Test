@@ -41,7 +41,7 @@ namespace VersionControlStressTest
             {
                 // Restore saved settings
                 if (!string.IsNullOrEmpty(Settings.Default.Directory))
-                    textBoxSVNWC.Text = Settings.Default.Directory;
+                    textBoxWCDir.Text = Settings.Default.Directory;
 
                 if (Settings.Default.SelectedSystem <= (comboBoxSystem.Items.Count - 1))
                     comboBoxSystem.SelectedIndex = Settings.Default.SelectedSystem;
@@ -94,6 +94,95 @@ namespace VersionControlStressTest
             }
         }
 
+        private void comboBoxSystem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                // Save selected system
+                Settings.Default.SelectedSystem = comboBoxSystem.SelectedIndex;
+                Settings.Default.Save();
+
+                SetFormControls();
+
+                // Clear selected directory
+                textBoxWCDir.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SetFormControls()
+        {
+            try
+            {
+                // Set controls based on selected system
+                switch (comboBoxSystem.SelectedIndex)
+                {
+                    case 0:
+                        {
+                            checkBoxPushAfterCreate.Visible = false;
+                            checkBoxPushAfterUpdate.Visible = false;
+                            break;
+                        }
+                    case 1:
+                        {
+                            checkBoxPushAfterCreate.Visible = true;
+                            checkBoxPushAfterUpdate.Visible = true;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+
+        #region VSC Methods
+        private void buttonWCDirBrowse_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FolderBrowserDialog diag = new FolderBrowserDialog();
+                DialogResult results = diag.ShowDialog(this);
+                if (results == DialogResult.OK)
+                {
+                    if (!string.IsNullOrEmpty(diag.SelectedPath)
+                        && Directory.Exists(diag.SelectedPath))
+                    {
+                        if (!DirectoryIsWC(diag.SelectedPath, "." + GetSystemType()))
+                        {
+                            MessageBox.Show("Selected directory is not part of a Working Copy."
+                                , "Invalid Directory"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Warning);
+                            textBoxWCDir.Text = "";
+                        }
+                        else
+                        {
+                            textBoxWCDir.Text = diag.SelectedPath;
+                            Settings.Default.Directory = diag.SelectedPath;
+                            Settings.Default.Save();
+                        }
+                    }
+                    else
+                        textBoxWCDir.Text = "";
+                }
+                else
+                    textBoxWCDir.Text = "";
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         /// <summary>
         /// Checks if the passed in Directory or any of it's parents are valid Working Copies.
         /// </summary>
@@ -134,158 +223,6 @@ namespace VersionControlStressTest
             }
 
             return false;
-        }
-
-        private void comboBoxSystem_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                // Save selected system
-                Settings.Default.SelectedSystem = comboBoxSystem.SelectedIndex;
-                Settings.Default.Save();
-
-                SetFormControls();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void SetFormControls()
-        {
-            try
-            {
-                switch (comboBoxSystem.SelectedIndex)
-                {
-                    case 0:
-                        {
-                            checkBoxPushAfterCreate.Visible = false;
-                            checkBoxPushAfterUpdate.Visible = false;
-                            break;
-                        }
-                    case 1:
-                        {
-                            checkBoxPushAfterCreate.Visible = true;
-                            checkBoxPushAfterUpdate.Visible = true;
-                            break;
-                        }
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        #endregion
-
-        #region VSC Methods
-        private void buttonSVNWCBrowse_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                FolderBrowserDialog diag = new FolderBrowserDialog();
-                DialogResult results = diag.ShowDialog(this);
-                if (results == DialogResult.OK)
-                {
-                    if (!string.IsNullOrEmpty(diag.SelectedPath)
-                        && Directory.Exists(diag.SelectedPath))
-                    {
-                        if (!DirectoryIsWC(diag.SelectedPath, "." + GetSystemType()))
-                        {
-                            MessageBox.Show("Selected directory is not part of a Working Copy."
-                                , "Invalid Directory"
-                                , MessageBoxButtons.OK
-                                , MessageBoxIcon.Warning);
-                            textBoxSVNWC.Text = "";
-                        }
-                        else
-                        {
-                            textBoxSVNWC.Text = diag.SelectedPath;
-                            Settings.Default.Directory = diag.SelectedPath;
-                            Settings.Default.Save();
-                        }
-                    }
-                    else
-                        textBoxSVNWC.Text = "";
-                }
-                else
-                    textBoxSVNWC.Text = "";
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        #region Create Methods
-        private void buttonCreate_Click(object sender, EventArgs e)
-        {
-            VCSCreate();
-        }
-
-        private void VCSCreate()
-        {
-            try
-            {
-                string dir = textBoxSVNWC.Text;
-                int fileCount = My_Parse.ParseInt32Or0( textBoxCreateFileCount.Text);
-                int fileSize = My_Parse.ParseInt32Or0(textBoxCreateFileSize.Text);
-
-                if (!ValidateVCS(dir, fileCount, fileSize))
-                    return;
-
-                List<string> log = new List<string>();
-
-                for (int i = 0; i < fileCount; i++)
-                {
-                    #region Random File Generator
-                    string fileName = Guid.NewGuid().ToString() + ".cmw";
-                    string filePath = Path.Combine(dir, fileName);
-                    byte[] data = new byte[fileSize * 1024 * 1024];
-                    Random rng = new Random();
-                    rng.NextBytes(data);
-                    File.WriteAllBytes(filePath, data);
-                    #endregion 
-
-                    string[] addLog = (VCSCommit(dir, string.Format("add {0}", fileName)));
-                    if (addLog != null)
-                        log.AddRange(addLog);
-
-                    string[] commit = VCSCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
-                        , "\""
-                        , fileName));
-                    if (commit != null)
-                        log.AddRange(commit);
-                }
-
-                // Push if option is checked
-                if (comboBoxSystem.SelectedIndex == 1 && checkBoxPushAfterCreate.Checked)
-                {
-                    string[] commit = VCSCommit(dir, string.Format("push"));
-                    if (commit != null)
-                        log.AddRange(commit);
-                }
-
-                ////MessageBox.Show(string.Join("\n", log));
-                //File.AppendAllText(dir + @"\CommitLog.txt", string.Join("\n", log));
-                MessageBox.Show("Done!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //HostGlobals.ErrorMessage(this.Name, System.Reflection.MethodBase.GetCurrentMethod().Name, ex, _spm, _touchScreenMode);
-            }
-        } 
-        #endregion
-
-        #region Update Methods
-        private void buttonUpdate_Click(object sender, EventArgs e)
-        {
-            VCSUpdate();
         }
 
         private String GetSystemType()
@@ -347,11 +284,119 @@ namespace VersionControlStressTest
             return true;
         }
 
+        private string[] VCSCommit(string dir, string command)
+        {
+            try
+            {
+                ProcessStartInfo cmdInfo = new ProcessStartInfo();
+
+                cmdInfo.CreateNoWindow = true;
+                cmdInfo.UseShellExecute = false;
+                cmdInfo.FileName = GetSystemType();
+                cmdInfo.Arguments = command; //command such as "commit -m"
+                cmdInfo.WorkingDirectory = dir;  //repo path
+                cmdInfo.RedirectStandardError = true;
+                cmdInfo.RedirectStandardOutput = true;
+                string[] logRaw = new string[] { };
+
+                using (var proc = new System.Diagnostics.Process())
+                {
+                    proc.StartInfo = cmdInfo;
+                    proc.Start();
+
+                    var output = proc.StandardOutput.ReadToEnd();
+                    var error = proc.StandardError.ReadToEnd();
+
+                    logRaw = string.IsNullOrEmpty(output) && !string.IsNullOrEmpty(error)
+                        ? error.Split('\n').ToArray()
+                        : output.Split('\n').ToArray();
+
+                    proc.WaitForExit();
+                    proc.Close();
+                }
+
+                return logRaw;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            return null;
+        }
+
+        #region Create Methods
+        private void buttonCreate_Click(object sender, EventArgs e)
+        {
+            VCSCreate();
+        }
+
+        private void VCSCreate()
+        {
+            try
+            {
+                string dir = textBoxWCDir.Text;
+                int fileCount = My_Parse.ParseInt32Or0( textBoxCreateFileCount.Text);
+                int fileSize = My_Parse.ParseInt32Or0(textBoxCreateFileSize.Text);
+
+                if (!ValidateVCS(dir, fileCount, fileSize))
+                    return;
+
+                List<string> log = new List<string>();
+
+                for (int i = 0; i < fileCount; i++)
+                {
+                    #region Random File Generator
+                    string fileName = Guid.NewGuid().ToString() + ".cmw";
+                    string filePath = Path.Combine(dir, fileName);
+                    byte[] data = new byte[fileSize * 1024 * 1024];
+                    Random rng = new Random();
+                    rng.NextBytes(data);
+                    File.WriteAllBytes(filePath, data);
+                    #endregion 
+
+                    string[] addLog = (VCSCommit(dir, string.Format("add {0}", fileName)));
+                    if (addLog != null)
+                        log.AddRange(addLog);
+
+                    string[] commit = VCSCommit(dir, string.Format("commit -m {0}Committing File {1}{0} {1}"
+                        , "\""
+                        , fileName));
+                    if (commit != null)
+                        log.AddRange(commit);
+                }
+
+                // Push if option is checked
+                if (comboBoxSystem.SelectedIndex == 1 && checkBoxPushAfterCreate.Checked)
+                {
+                    string[] commit = VCSCommit(dir, string.Format("push"));
+                    if (commit != null)
+                        log.AddRange(commit);
+                }
+
+                ////MessageBox.Show(string.Join("\n", log));
+                //File.AppendAllText(dir + @"\CommitLog.txt", string.Join("\n", log));
+                MessageBox.Show("Done!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //HostGlobals.ErrorMessage(this.Name, System.Reflection.MethodBase.GetCurrentMethod().Name, ex, _spm, _touchScreenMode);
+            }
+        } 
+        #endregion
+
+        #region Update Methods
+        private void buttonUpdate_Click(object sender, EventArgs e)
+        {
+            VCSUpdate();
+        }
+
         private void VCSUpdate()
         {
             try
             {
-                string dir = textBoxSVNWC.Text;
+                string dir = textBoxWCDir.Text;
                 int fileCount = My_Parse.ParseInt32Or0(textBoxUpdateCount.Text);
                 int fileSize = My_Parse.ParseInt32Or0(textBoxUpdateFileSize.Text);
 
@@ -374,7 +419,7 @@ namespace VersionControlStressTest
                 }
                 #endregion
 
-                // Loop through valid files, override them with new data and commit to svn
+                // Loop through valid files, override them with new data and commit to vcs
                 List<string> log = new List<string>();
 
                 for (int x = 0; x < fileCount; x++)
@@ -415,50 +460,9 @@ namespace VersionControlStressTest
             }
         }
         #endregion
-
-        private string[] VCSCommit(string dir, string svnCommand)
-        {
-            try
-            {
-                ProcessStartInfo cmdInfo = new ProcessStartInfo();
-                Process gitProcess = new Process();
-
-                cmdInfo.CreateNoWindow = true;
-                cmdInfo.UseShellExecute = false;
-                cmdInfo.FileName = GetSystemType();
-                cmdInfo.Arguments = svnCommand; //command such as "commit -m"
-                cmdInfo.WorkingDirectory = dir;  //repo path
-                cmdInfo.RedirectStandardError = true;
-                cmdInfo.RedirectStandardOutput = true;
-                string[] logRaw = new string[] { };
-
-                using (var proc = new System.Diagnostics.Process())
-                {
-                    proc.StartInfo = cmdInfo;
-                    proc.Start();
-
-                    var output = proc.StandardOutput.ReadToEnd();
-                    var error = proc.StandardError.ReadToEnd();
-
-                    logRaw = string.IsNullOrEmpty(output) && !string.IsNullOrEmpty(error)
-                        ? error.Split('\n').ToArray()
-                        : output.Split('\n').ToArray();
-
-                    proc.WaitForExit();
-                    proc.Close();
-                }
-
-                return logRaw;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-            return null;
-        }
         #endregion
 
+        #region Sample Code
         #region Worker Methods
         private bool TestWorker()
         {
@@ -697,6 +701,7 @@ namespace VersionControlStressTest
 
         //    LogError(form, method, ex);
         //}
+        #endregion 
         #endregion
     }
 }

@@ -42,9 +42,9 @@ namespace VersionControlStressTest
             this.textBoxCreateFileSize = new System.Windows.Forms.TextBox();
             this.labelFileCount = new System.Windows.Forms.Label();
             this.textBoxCreateFileCount = new System.Windows.Forms.TextBox();
-            this.buttonSVNWCBrowse = new System.Windows.Forms.Button();
-            this.textBoxSVNWC = new System.Windows.Forms.TextBox();
-            this.labelSVNWC = new System.Windows.Forms.Label();
+            this.buttonWCBrowse = new System.Windows.Forms.Button();
+            this.textBoxWCDir = new System.Windows.Forms.TextBox();
+            this.labelWCDir = new System.Windows.Forms.Label();
             this.groupBoxSystem = new System.Windows.Forms.GroupBox();
             this.labelSystem = new System.Windows.Forms.Label();
             this.comboBoxSystem = new System.Windows.Forms.ComboBox();
@@ -105,7 +105,7 @@ namespace VersionControlStressTest
             this.textBoxUpdateFileSize.Name = "textBoxUpdateFileSize";
             this.textBoxUpdateFileSize.Size = new System.Drawing.Size(49, 20);
             this.textBoxUpdateFileSize.TabIndex = 10;
-            this.textBoxUpdateFileSize.Text = "2";
+            this.textBoxUpdateFileSize.Text = "1";
             // 
             // buttonUpdate
             // 
@@ -132,7 +132,7 @@ namespace VersionControlStressTest
             this.textBoxUpdateCount.Name = "textBoxUpdateCount";
             this.textBoxUpdateCount.Size = new System.Drawing.Size(49, 20);
             this.textBoxUpdateCount.TabIndex = 8;
-            this.textBoxUpdateCount.Text = "10";
+            this.textBoxUpdateCount.Text = "1";
             // 
             // groupBoxCreate
             // 
@@ -176,7 +176,7 @@ namespace VersionControlStressTest
             this.textBoxCreateFileSize.Name = "textBoxCreateFileSize";
             this.textBoxCreateFileSize.Size = new System.Drawing.Size(49, 20);
             this.textBoxCreateFileSize.TabIndex = 10;
-            this.textBoxCreateFileSize.Text = "2";
+            this.textBoxCreateFileSize.Text = "1";
             // 
             // labelFileCount
             // 
@@ -193,36 +193,36 @@ namespace VersionControlStressTest
             this.textBoxCreateFileCount.Name = "textBoxCreateFileCount";
             this.textBoxCreateFileCount.Size = new System.Drawing.Size(49, 20);
             this.textBoxCreateFileCount.TabIndex = 8;
-            this.textBoxCreateFileCount.Text = "10";
+            this.textBoxCreateFileCount.Text = "1";
             // 
-            // buttonSVNWCBrowse
+            // buttonWCBrowse
             // 
-            this.buttonSVNWCBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSVNWCBrowse.Location = new System.Drawing.Point(507, 4);
-            this.buttonSVNWCBrowse.Name = "buttonSVNWCBrowse";
-            this.buttonSVNWCBrowse.Size = new System.Drawing.Size(75, 23);
-            this.buttonSVNWCBrowse.TabIndex = 6;
-            this.buttonSVNWCBrowse.Text = "Browse";
-            this.buttonSVNWCBrowse.UseVisualStyleBackColor = true;
-            this.buttonSVNWCBrowse.Click += new System.EventHandler(this.buttonSVNWCBrowse_Click);
+            this.buttonWCBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonWCBrowse.Location = new System.Drawing.Point(507, 4);
+            this.buttonWCBrowse.Name = "buttonWCBrowse";
+            this.buttonWCBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonWCBrowse.TabIndex = 6;
+            this.buttonWCBrowse.Text = "Browse";
+            this.buttonWCBrowse.UseVisualStyleBackColor = true;
+            this.buttonWCBrowse.Click += new System.EventHandler(this.buttonWCDirBrowse_Click);
             // 
-            // textBoxSVNWC
+            // textBoxWCDir
             // 
-            this.textBoxSVNWC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxWCDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSVNWC.Location = new System.Drawing.Point(95, 6);
-            this.textBoxSVNWC.Name = "textBoxSVNWC";
-            this.textBoxSVNWC.Size = new System.Drawing.Size(406, 20);
-            this.textBoxSVNWC.TabIndex = 5;
+            this.textBoxWCDir.Location = new System.Drawing.Point(95, 6);
+            this.textBoxWCDir.Name = "textBoxWCDir";
+            this.textBoxWCDir.Size = new System.Drawing.Size(406, 20);
+            this.textBoxWCDir.TabIndex = 5;
             // 
-            // labelSVNWC
+            // labelWCDir
             // 
-            this.labelSVNWC.AutoSize = true;
-            this.labelSVNWC.Location = new System.Drawing.Point(12, 9);
-            this.labelSVNWC.Name = "labelSVNWC";
-            this.labelSVNWC.Size = new System.Drawing.Size(77, 13);
-            this.labelSVNWC.TabIndex = 4;
-            this.labelSVNWC.Text = "Working Copy:";
+            this.labelWCDir.AutoSize = true;
+            this.labelWCDir.Location = new System.Drawing.Point(12, 9);
+            this.labelWCDir.Name = "labelWCDir";
+            this.labelWCDir.Size = new System.Drawing.Size(77, 13);
+            this.labelWCDir.TabIndex = 4;
+            this.labelWCDir.Text = "Working Copy:";
             // 
             // groupBoxSystem
             // 
@@ -267,9 +267,9 @@ namespace VersionControlStressTest
             this.Controls.Add(this.groupBoxSystem);
             this.Controls.Add(this.groupBoxUpdate);
             this.Controls.Add(this.groupBoxCreate);
-            this.Controls.Add(this.labelSVNWC);
-            this.Controls.Add(this.buttonSVNWCBrowse);
-            this.Controls.Add(this.textBoxSVNWC);
+            this.Controls.Add(this.labelWCDir);
+            this.Controls.Add(this.buttonWCBrowse);
+            this.Controls.Add(this.textBoxWCDir);
             this.Name = "frmMain";
             this.Text = "Source Control - Stress Test";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
@@ -287,9 +287,9 @@ namespace VersionControlStressTest
 
         #endregion
         private System.Windows.Forms.Button buttonCreate;
-        private System.Windows.Forms.Button buttonSVNWCBrowse;
-        private System.Windows.Forms.TextBox textBoxSVNWC;
-        private System.Windows.Forms.Label labelSVNWC;
+        private System.Windows.Forms.Button buttonWCBrowse;
+        private System.Windows.Forms.TextBox textBoxWCDir;
+        private System.Windows.Forms.Label labelWCDir;
         private System.Windows.Forms.GroupBox groupBoxCreate;
         private System.Windows.Forms.Label labelFileCount;
         private System.Windows.Forms.TextBox textBoxCreateFileCount;
