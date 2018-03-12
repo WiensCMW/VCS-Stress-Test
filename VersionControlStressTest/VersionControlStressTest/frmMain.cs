@@ -87,6 +87,48 @@ namespace VersionControlStressTest
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Checks if the passed in Directory or any of it's parents are valid Working Copies.
+        /// </summary>
+        /// <param name="dir">The path of the directory you want to search.</param>
+        /// <param name="vcsHiddenFolder">The Version Control hidden folder to indicate it's a working copy</param>
+        /// <param name="prevDir">pass null on first call. Used to prevent infinite recusions.</param>
+        /// <returns>Returns true if valid working directory was found, else returns false.</returns>
+        private bool DirectoryIsWC(string dir, string vcsHiddenFolder, string prevDir = null)
+        {
+            try
+            {
+                // Search passed in dir for folders matching the passed in systemType
+                string[] localDirResults = Directory.GetDirectories(dir, vcsHiddenFolder);
+
+                // Return true if any results were found
+                if (localDirResults.Length > 0)
+                    return true;
+                else
+                {
+                    // Create new path for one directory up from passed in directory
+                    string newDir = Path.GetFullPath(Path.Combine(dir, @"..\"));
+
+                    // Check against infinite recusion
+                    if (prevDir == dir)
+                        return false;
+
+                    // Return false if new directory isn't valid
+                    if (!Directory.Exists(newDir))
+                        return false;
+                    else
+                        // Call current method in recursive method with new directory
+                        return DirectoryIsWC(newDir, vcsHiddenFolder, dir);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return false;
+        }
         #endregion
 
         #region SVN Methods
@@ -101,7 +143,16 @@ namespace VersionControlStressTest
                     if (!string.IsNullOrEmpty(diag.SelectedPath)
                         && Directory.Exists(diag.SelectedPath))
                     {
-                        textBoxSVNWC.Text = diag.SelectedPath;
+                        if (!DirectoryIsWC(diag.SelectedPath, ".svn"))
+                        {
+                            MessageBox.Show("Selected directory is not part of a Working Copy."
+                                , "Invalid Directory"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Warning);
+                            textBoxSVNWC.Text = "";
+                        }
+                        else
+                            textBoxSVNWC.Text = diag.SelectedPath;
                     }
                     else
                         textBoxSVNWC.Text = "";
