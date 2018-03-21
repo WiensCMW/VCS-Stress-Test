@@ -120,13 +120,19 @@ namespace VersionControlStressTest
                 // Set controls based on selected system
                 switch (comboBoxSystem.SelectedIndex)
                 {
-                    case 0:
+                    case 0: // Subversion
                         {
                             checkBoxPushAfterCreate.Visible = false;
                             checkBoxPushAfterUpdate.Visible = false;
                             break;
                         }
-                    case 1:
+                    case 1: // Mercurial
+                        {
+                            checkBoxPushAfterCreate.Visible = true;
+                            checkBoxPushAfterUpdate.Visible = true;
+                            break;
+                        }
+                    case 2: // Git
                         {
                             checkBoxPushAfterCreate.Visible = true;
                             checkBoxPushAfterUpdate.Visible = true;
@@ -233,6 +239,8 @@ namespace VersionControlStressTest
                     return "svn";
                 case 1:
                     return "hg";
+                case 2:
+                    return "git";
                 default:
                     return "";
             }
@@ -367,7 +375,9 @@ namespace VersionControlStressTest
                 }
 
                 // Push if option is checked
-                if (comboBoxSystem.SelectedIndex == 1 && checkBoxPushAfterCreate.Checked)
+                if ((comboBoxSystem.SelectedIndex == 1
+                    || comboBoxSystem.SelectedIndex == 2)
+                    && checkBoxPushAfterCreate.Checked)
                 {
                     string[] commit = VCSCommit(dir, string.Format("push"));
                     if (commit != null)
@@ -442,7 +452,9 @@ namespace VersionControlStressTest
                 }
 
                 // Push if option is checked
-                if (comboBoxSystem.SelectedIndex == 1 && checkBoxPushAfterCreate.Checked)
+                if ((comboBoxSystem.SelectedIndex == 1
+                    || comboBoxSystem.SelectedIndex == 2)
+                    && checkBoxPushAfterCreate.Checked)
                 {
                     string[] commit = VCSCommit(dir, string.Format("push"));
                     if (commit != null)
