@@ -252,7 +252,8 @@ namespace VersionControlStressTest
             this.comboBoxSystem.FormattingEnabled = true;
             this.comboBoxSystem.Items.AddRange(new object[] {
             "Subversion",
-            "Mercurial"});
+            "Mercurial",
+            "Git"});
             this.comboBoxSystem.Location = new System.Drawing.Point(56, 19);
             this.comboBoxSystem.Name = "comboBoxSystem";
             this.comboBoxSystem.Size = new System.Drawing.Size(121, 21);
