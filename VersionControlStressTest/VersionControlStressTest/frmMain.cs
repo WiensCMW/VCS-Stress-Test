@@ -442,6 +442,15 @@ namespace VersionControlStressTest
                         rng.NextBytes(data);
                         File.WriteAllBytes(files[i].FullName, data);
                         #endregion
+
+                        #region Stage modified file for git
+                        if (GetSystemType() == "git")
+                        {
+                            string[] addLog = (VCSCommit(dir, string.Format("add {0}", files[i].FullName)));
+                            if (addLog != null)
+                                log.AddRange(addLog);
+                        }
+                        #endregion
                     }
 
                     string[] commit = VCSCommit(dir, string.Format("commit -m {0}Updated Files {1}{0}"
