@@ -1,4 +1,6 @@
 *Created in Visual Studio 2017*
 
 # VCS-Stress-Test
-Simple Windows Form app to generate large volumes of random files and commits to SVN, Mercurial and Git to see how repos will perform with a large number of revisions.
+Windows Form App to generate random binary files and commit them to SVN, Mercurial or Git.
+
+I created the app because I needed a quick way to test the size and performance of a repo after thousands of edits to binary files.
